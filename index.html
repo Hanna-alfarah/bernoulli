@@ -9,10 +9,10 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="معادلة برنولي — جرّبها بإصبعك">
 <meta property="og:description" content="ضيّق الأنبوب، غيّر سرعة الماء، وشاهد الضغط يتغيّر أمامك.">
-<meta property="og:image" content="https://hanna-alfarah.github.io/bernoulli-test/og.png">
+<meta property="og:image" content="https://hanna-alfarah.github.io/bernoulli/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:url" content="https://hanna-alfarah.github.io/bernoulli-test/">
+<meta property="og:url" content="https://hanna-alfarah.github.io/bernoulli/">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💧</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,6 +23,7 @@
   --bg:#eef3f9; --card:#ffffff; --ink:#0f1d2e; --muted:#5b6c82; --line:#dce5f0; --soft:#f1f6fc; --chip:#e3effc;
   --accent:#0b74d1; --press:#1d78d6; --press-ink:#1462b3; --kin:#f08c00; --kin-ink:#b45f00;
   --danger:#e03c3c; --danger-soft:#fdecec; --danger-ink:#b42323; --ok:#14995a; --ok-soft:#e6f6ee;
+  --cav:#7c3aed; --cav-soft:#f1eafe; --cav-ink:#5b21b6;
   --track:#d9e3ef; --stage:#f6f9fd; --grid:rgba(20,60,110,.10);
   --water1:#7cc6ff; --water2:#2b8ce0; --water3:#1565b8;
   --wall:rgba(98,118,142,.85); --glass:rgba(140,175,210,.20); --glass-edge:rgba(80,110,145,.65);
@@ -34,6 +35,7 @@
     --bg:#0a111d; --card:#111a29; --ink:#e7eef7; --muted:#97a7bc; --line:#213049; --soft:#152136; --chip:#14304f;
     --accent:#4aa8ff; --press:#4aa3ff; --press-ink:#8cc6ff; --kin:#ffa940; --kin-ink:#ffbd66;
     --danger:#ff6464; --danger-soft:#3a1717; --danger-ink:#ffa0a0; --ok:#3ccf8a; --ok-soft:#10301f;
+    --cav:#b48cff; --cav-soft:#251a3d; --cav-ink:#cbb2ff;
     --track:#24344d; --stage:#0d1624; --grid:rgba(160,200,255,.08);
     --water1:#5ab4ff; --water2:#1f78cc; --water3:#0f4f94;
     --wall:rgba(150,170,195,.75); --glass:rgba(150,190,240,.10); --glass-edge:rgba(170,200,235,.5);
@@ -68,6 +70,7 @@ canvas{display:block;width:100%;touch-action:pan-y;user-select:none;-webkit-user
 .tip.show{opacity:1}
 .status{margin:10px 0 2px;padding:10px 12px;border-radius:12px;background:var(--soft);font-size:15px;font-weight:600;min-height:3.4em;line-height:1.8}
 .status.warn{background:var(--danger-soft);color:var(--danger-ink)}
+.status.cav{background:var(--cav-soft);color:var(--cav-ink)}
 .controls{display:grid;grid-template-columns:1fr;gap:2px 22px;margin-top:6px}
 @media (min-width:760px){.controls{grid-template-columns:repeat(3,1fr)}}
 .ctl{padding:4px 2px}
@@ -123,6 +126,11 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
 .legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12.5px;color:var(--muted);font-weight:600;margin-top:4px}
 .legend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-left:5px}
 .note{font-size:13px;color:var(--muted);margin:8px 0 0}
+.cavnote{display:none;margin:0;padding:10px 12px;border-radius:12px;background:var(--cav-soft);color:var(--cav-ink);font-weight:700;font-size:14.5px}
+.cav .cavnote{display:block}
+.eqcard.cav .eq,.eqcard.cav .bars,.eqcard.cav .legend,.eqcard.cav .note{display:none}
+.sec.cav .x .u,.sec.cav .neg{display:none}
+.kv dd.cavv{color:var(--cav-ink)}
 .block{padding:16px;margin-top:14px}
 .ch{list-style:none;margin:0;padding:0;display:grid;gap:8px}
 .ch li{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:12px;background:var(--soft);transition:background .3s}
@@ -219,18 +227,19 @@ footer a{color:var(--accent)}
         <div><dt>ارتفاع الماء h₁</dt><dd id="o_h1"></dd></div>
       </dl>
     </div>
-    <div class="card sec">
+    <div class="card sec" id="sec2">
       <h3><span class="badge">2</span> في المنتصف</h3>
       <dl class="kv">
         <div><dt>القطر d₂</dt><dd><bdi id="o_d2"></bdi> <span class="u">سم</span></dd></div>
         <div><dt>المساحة A₂</dt><dd><bdi id="o_a2"></bdi> <span class="u">سم²</span></dd></div>
-        <div><dt>السرعة v₂</dt><dd class="k"><bdi id="o_v2"></bdi> <span class="u">م/ث</span></dd></div>
-        <div><dt>الضغط P₂</dt><dd class="p"><bdi id="o_p2"></bdi> <span class="u">كيلوباسكال</span> <span class="neg" id="o_p2n"></span></dd></div>
+        <div><dt>السرعة v₂</dt><dd class="k x"><bdi id="o_v2"></bdi> <span class="u">م/ث</span></dd></div>
+        <div><dt>الضغط P₂</dt><dd class="p x"><bdi id="o_p2"></bdi> <span class="u">كيلوباسكال</span> <span class="neg" id="o_p2n"></span></dd></div>
         <div><dt>ارتفاع الماء h₂</dt><dd id="o_h2"></dd></div>
       </dl>
     </div>
-    <div class="card eqcard wide">
+    <div class="card eqcard wide" id="eqB">
       <h3>معادلة برنولي بالأرقام</h3>
+      <p class="cavnote">⛔ هنا لا تصح معادلة برنولي البسيطة: الماء في المنتصف يغلي من قلّة الضغط (تكهّف) ويتحوّل جزء منه إلى بخار، لذلك أوقفنا الحساب بدل عرض أرقام مستحيلة.</p>
       <div class="eq" dir="ltr">
         <div class="sym">P₁ + ½ρv₁² = P₂ + ½ρv₂²</div>
         <div><span class="p" id="e_p1"></span> + <span class="k" id="e_k1"></span> = <span class="p" id="e_p2"></span> + <span class="k" id="e_k2"></span></div>
@@ -243,8 +252,9 @@ footer a{color:var(--accent)}
       <div class="legend"><span><i style="background:var(--press)"></i>طاقة الضغط P</span><span><i style="background:var(--kin)"></i>طاقة الحركة <bdi>½ρv²</bdi></span><span>المجموع نفسه دائمًا</span></div>
       <p class="note">الضغط هنا هو الضغط فوق الضغط الجوي. كثافة الماء ρ = 1000 كغ/م³.</p>
     </div>
-    <div class="card eqcard wide full">
+    <div class="card eqcard wide full" id="eqC">
       <h3>قانون الاستمرارية: ما يدخل = ما يخرج</h3>
+      <p class="cavnote">⛔ مع فقاعات البخار لم يعد في الأنبوب ماء سائل فقط، فلا يصح الحساب البسيط هنا.</p>
       <div class="eq" dir="ltr">
         <div class="sym">A₁ v₁ = A₂ v₂ &nbsp;⇒&nbsp; v₂ = v₁ × (A₁ ÷ A₂)</div>
         <div id="c_line"></div>
@@ -305,6 +315,7 @@ footer a{color:var(--accent)}
       <ul class="life">
         <li>اعتبرنا الماء لا ينضغط وبلا احتكاك، والجريان هادئًا ومستقرًا، وسرعة الماء متساوية في كل المقطع.</li>
         <li>لذلك يعود الماء في الأنبوب 3 إلى ارتفاع الأنبوب 1 نفسه. في الأنابيب الحقيقية يكون أقل قليلًا لأن الاحتكاك يستهلك جزءًا من الطاقة.</li>
+        <li><b>التكهّف:</b> الضغط لا يمكن أن ينخفض بلا حدود. عندما يصل إلى <b>ضغط بخار الماء</b> (نحو 2.3 كيلوباسكال مطلق عند 20°م، أي نحو 99 كيلوباسكال تحت الضغط الجوي) يبدأ الماء يغلي وهو بارد وتتكوّن فقاعات بخار، ثم تنهار عندما يرتفع الضغط بعد العنق، وقد تُتلف الأنابيب والمضخّات مع الوقت. عندها لا تصح معادلة برنولي البسيطة، لذلك توقف الصفحة الحساب وتعرض رسالة.</li>
         <li>الضغط المعروض هو الضغط فوق الضغط الجوي. والرسم بمقياس حقيقي: الأقطار والارتفاعات بالمقياس نفسه، لكن حركة الماء على الشاشة أبطأ 5 مرات لكي تراها.</li>
       </ul>
     </div>
@@ -318,7 +329,7 @@ footer a{color:var(--accent)}
 
 <footer>
   الحسابات: قانون الاستمرارية ومعادلة برنولي، ρ = 1000 كغ/م³، g = 9.81 م/ث²، بدون احتكاك.
-  · <a href="https://github.com/Hanna-alfarah/bernoulli-test">الكود مفتوح على GitHub</a>
+  · <a href="https://github.com/Hanna-alfarah/bernoulli">الكود مفتوح على GitHub</a>
 </footer>
 <div class="toast" id="toast" role="status"></div>
 
@@ -331,6 +342,8 @@ function f(x, d) { let t = (+x).toFixed(d); if (/^-0(\.0+)?$/.test(t)) t = t.sli
 
 // ================= الفيزياء =================
 const RHO = 1000, G = 9.81;            // كثافة الماء kg/m³ ، الجاذبية m/s²
+const P_ATM = 101325;                  // الضغط الجوي Pa
+const P_VAP = 2339;                    // ضغط بخار الماء عند 20°م Pa (مطلق)
 const D1 = 0.10, R1 = D1 / 2;          // قطر المدخل والمخرج: 10 سم
 const D2_MIN = 0.03, D2_MAX = 0.14;    // مجال قطر المنتصف
 const LT = 0.10, LC = 0.16;            // طول العنق، وطول منطقة التضييق/التوسيع (م)
@@ -361,9 +374,13 @@ function solve() {
     // الفتحة في أعلى الجدار، على ارتفاع r فوق المحور: ضغطها = P - ρ g r
     return { off, r, v, p, h: p / (RHO * G), air: p - RHO * G * r < 0 };
   });
+  // أخفض ضغط بالأنبوب: أعلى جدار العنق. إذا وصل لضغط بخار الماء يبدأ التكهّف والنموذج البسيط ما عاد يصح
+  const cav = P_ATM + p2 - RHO * G * R2 <= P_VAP;
+  // أقصى سرعة ممكنة للماء السائل (عندها يصير الضغط = ضغط البخار)، نستعملها لحركة الجزيئات فقط
+  const vCap = Math.sqrt(v1 * v1 + 2 * (p1 + P_ATM - P_VAP) / RHO);
   return {
     A1: Math.PI * R1 * R1, A2: Math.PI * R2 * R2, v1, v2, p1, p2, k1, k2,
-    E: p1 + k1, H: (p1 + k1) / (RHO * G), Q: Math.PI * R1 * R1 * v1, tubes,
+    E: p1 + k1, H: (p1 + k1) / (RHO * G), Q: Math.PI * R1 * R1 * v1, tubes, cav, vCap,
   };
 }
 // قيم العرض (كيلوباسكال، منزلتان) بحيث يتطابق المجموع على الطرفين بعد التقريب
@@ -382,11 +399,12 @@ const TOP_PAD = 30, BOT_PAD = 40, RMAX = D2_MAX / 2;
 const isOG = /[?&]og\b/.test(location.search);
 if (isOG) document.documentElement.classList.add('og');
 let W = 0, H = 0, s = 400, axisY = 0, uc = 0, worldW = 1, rulerW = 32, dpr = 1, wallPx = 4, tubeW = 10, gain = 3;
-let parts = [], bubbles = [], lv = [0, 0, 0, 0, 0], bubbleTimer = [0, 0, 0, 0, 0];
+let parts = [], bubbles = [], vapor = [], vaporTimer = 0, lv = [0, 0, 0, 0, 0], bubbleTimer = [0, 0, 0, 0, 0];
 let cur = solve(), showEnergy = isOG, dragging = false, hovering = false, visible = true, C = {};
 
 const X = (u) => W - u * s;            // الماء يجري من اليمين إلى اليسار
 const rAtU = (u) => radiusAtOffset(u - uc);
+const flowSpeed = (r) => Math.min(speedAtRadius(r), cur.vCap);
 
 function readColors() {
   const cs = getComputedStyle(document.documentElement);
@@ -395,7 +413,7 @@ function readColors() {
     water1: g('--water1'), water2: g('--water2'), water3: g('--water3'), wall: g('--wall'), glass: g('--glass'),
     glassEdge: g('--glass-edge'), grid: g('--grid'), ink: g('--ink'), muted: g('--muted'), card: g('--card'),
     line: g('--line'), kin: g('--kin'), kinInk: g('--kin-ink'), press: g('--press'), pressInk: g('--press-ink'),
-    danger: g('--danger'), accent: g('--accent'), stage: g('--stage'),
+    danger: g('--danger'), accent: g('--accent'), stage: g('--stage'), cav: g('--cav'),
   };
 }
 
@@ -437,20 +455,21 @@ function initParticles() {
 }
 
 function step(dt) {
-  const vmax = state.v1 * (R1 * R1) / Math.pow(Math.min(R1, state.d2 / 2), 2);
+  const vmax = Math.min(cur.vCap, state.v1 * (R1 * R1) / Math.pow(Math.min(R1, state.d2 / 2), 2));
   const n = Math.max(1, Math.ceil(vmax * TIME_SCALE * dt * s / 2.5));
   const h = dt / n;
-  const adv = (o) => { for (let k = 0; k < n; k++) o.u += speedAtRadius(rAtU(o.u)) * TIME_SCALE * h; };
+  const adv = (o) => { for (let k = 0; k < n; k++) o.u += flowSpeed(rAtU(o.u)) * TIME_SCALE * h; };
   for (const p of parts) {
     adv(p);
     if (p.u > worldW) { p.u = (p.u - worldW) % worldW; p.e = randEta(); }
   }
   // مستوى الماء بالأنابيب يلحق القيمة الجديدة تدريجيًا (مثل الواقع)
   const a = 1 - Math.exp(-dt / 0.35);
-  cur.tubes.forEach((t, i) => { lv[i] += ((t.air ? t.r : Math.min(t.h, H_TOP)) - lv[i]) * a; });
+  // وقت التكهّف نوقف الحساب: الأنابيب بعد المدخل تفضى وتصير باهتة (ما في قيمة صحيحة نعرضها)
+  cur.tubes.forEach((t, i) => { lv[i] += ((t.air || (cur.cav && i > 0) ? t.r : Math.min(t.h, H_TOP)) - lv[i]) * a; });
   // فقاعات الهواء عندما يصير الضغط عند الفتحة أقل من الجوي
   cur.tubes.forEach((t, i) => {
-    if (!t.air) { bubbleTimer[i] = 0; return; }
+    if (!t.air || cur.cav) { bubbleTimer[i] = 0; return; }
     bubbleTimer[i] += dt * (2 + 8 * clamp((t.r - t.h) / 0.15, 0.15, 1));
     while (bubbleTimer[i] >= 1) {
       bubbleTimer[i] -= 1;
@@ -469,6 +488,17 @@ function step(dt) {
     }
   }
   bubbles = bubbles.filter((b) => b.tube >= 0 || b.u < worldW);
+  // فقاعات بخار التكهّف: تتكوّن بالعنق وتنهار لما يرجع الضغط يرتفع بعده
+  if (cur.cav) {
+    vaporTimer += dt * 120;
+    while (vaporTimer >= 1) {
+      vaporTimer -= 1;
+      if (vapor.length < 220) vapor.push({ u: uc - LT / 2 + Math.random() * LT * 0.9, e: (Math.random() < 0.5 ? -1 : 1) * (0.3 + Math.random() * 0.62), rad: 1.5 + Math.random() * 1.8, ph: Math.random() * 6.3 });
+    }
+  } else vaporTimer = 0;
+  // رسم توضيحي: غيمة البخار ملتصقة بالعنق وتزحف ببطء، وإلا كانت تمرق بسرعة ما بتنشاف
+  for (const v of vapor) { v.u += 0.12 * dt; v.ph += dt * 9; }
+  vapor = vapor.filter((v) => v.u < uc + LT / 2 + 0.07);
 }
 
 function profile() {
@@ -514,12 +544,30 @@ function drawPipe(pr) {
   // المحور (منه نقيس ارتفاع الماء)
   ctx.setLineDash([12, 4, 2, 4]); ctx.strokeStyle = 'rgba(255,255,255,0.4)';
   ctx.beginPath(); trace(pr, 0); ctx.stroke(); ctx.setLineDash([]);
+  if (cur.cav) {
+    ctx.save();
+    ctx.beginPath(); trace(pr, 1); traceBack(pr, -1); ctx.closePath(); ctx.clip();
+    const x0 = X(uc - LT / 2 - 0.01), x1 = X(uc + LT / 2 + 0.07);
+    const g = ctx.createLinearGradient(x0, 0, x1, 0);
+    g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(0.2, 'rgba(255,255,255,0.45)');
+    g.addColorStop(0.65, 'rgba(255,255,255,0.18)'); g.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = g; ctx.fillRect(x1, axisY - RMAX * s, x0 - x1, 2 * RMAX * s);
+    ctx.restore();
+  }
+}
+function drawVapor() {
+  ctx.fillStyle = 'rgba(255,255,255,0.85)';
+  for (const v of vapor) {
+    const k = v.u > uc + LT / 2 ? 1 - (v.u - uc - LT / 2) / 0.07 : 1;   // تنهار بعد العنق
+    if (k <= 0) continue;
+    ctx.beginPath(); ctx.arc(X(v.u), axisY - (v.e + Math.sin(v.ph) * 0.04) * rAtU(v.u) * s, v.rad * k, 0, 6.2832); ctx.fill();
+  }
 }
 
 function drawParticles() {
   ctx.lineCap = 'round'; ctx.lineWidth = 2;
   for (const p of parts) {
-    const r = rAtU(p.u), v = speedAtRadius(r);
+    const r = rAtU(p.u), v = flowSpeed(r);
     const x = X(p.u), y = axisY - p.e * r * s;
     const ut = p.u - Math.min(v * TIME_SCALE * 0.10, 0.06);   // ذيل طوله ∝ السرعة
     let xt = X(ut); const yt = axisY - p.e * rAtU(ut) * s;
@@ -559,8 +607,9 @@ function edgeFade() {
 function drawTubes() {
   const yTop = axisY - H_TOP * s, hw = tubeW / 2;
   cur.tubes.forEach((t, i) => {
-    const x = X(uc + t.off), yIn = axisY - t.r * s, yOut = yIn - wallPx;
+    const x = X(uc + t.off), yIn = axisY - t.r * s, yOut = yIn - wallPx, off = cur.cav && i > 0;
     ctx.clearRect(x - hw, yOut - 0.5, tubeW, wallPx + 1);          // فتحة في الجدار
+    ctx.globalAlpha = off ? 0.4 : 1;
     ctx.fillStyle = C.glass; ctx.fillRect(x - hw, yTop, tubeW, yIn - yTop);
     const yL = axisY - lv[i] * s;
     if (yL < yIn - 0.3) {
@@ -569,12 +618,13 @@ function drawTubes() {
       ctx.fillStyle = g; ctx.fillRect(x - hw, yL, tubeW, yIn - yL + 1);
       ctx.fillStyle = 'rgba(255,255,255,0.6)'; ctx.fillRect(x - hw, yL, tubeW, 1.5);
     }
-    ctx.strokeStyle = t.air ? C.danger : C.glassEdge; ctx.lineWidth = 1.5;
+    ctx.strokeStyle = t.air && !off ? C.danger : C.glassEdge; ctx.lineWidth = 1.5;
     ctx.beginPath();
     ctx.moveTo(x - hw - 0.75, yOut); ctx.lineTo(x - hw - 0.75, yTop); ctx.lineTo(x - hw - 3.5, yTop - 3);
     ctx.moveTo(x + hw + 0.75, yOut); ctx.lineTo(x + hw + 0.75, yTop); ctx.lineTo(x + hw + 3.5, yTop - 3);
     ctx.stroke();
     ctx.fillStyle = 'rgba(255,255,255,0.28)'; ctx.fillRect(x - hw + 1.5, yTop + 4, 1.5, Math.max(0, yIn - yTop - 8));
+    ctx.globalAlpha = 1;
   });
   for (const b of bubbles) if (b.tube >= 0) bubble(X(uc + TUBE_OFFS[b.tube]) + Math.sin(b.wob) * 1.5, axisY - b.y * s, Math.min(b.rad, hw - 1.5));
 }
@@ -652,7 +702,8 @@ function drawReadings() {
   cur.tubes.forEach((t, i) => {
     const x = X(uc + t.off);
     ctx.font = `800 ${W < 500 ? 11.5 : 13}px ${FONT}`;
-    if (t.air) { ctx.fillStyle = C.danger; ctx.direction = 'rtl'; ctx.fillText('هواء', x, yTop - 9); ctx.direction = 'ltr'; }
+    if (cur.cav && i > 0) { ctx.fillStyle = C.muted; ctx.fillText('—', x, yTop - 9); }
+    else if (t.air) { ctx.fillStyle = C.danger; ctx.direction = 'rtl'; ctx.fillText('هواء', x, yTop - 9); ctx.direction = 'ltr'; }
     else { ctx.fillStyle = BADGES[i] ? C.ink : C.muted; ctx.fillText(f(lv[i] * 100, 1), x, yTop - 9); }
     if (BADGES[i]) {
       const bx = x - tubeW / 2 - 12, by = yTop + 13;
@@ -680,7 +731,8 @@ function drawLabels() {
   const y = H - BOT_PAD / 2 - 1, sz = W < 500 ? 12 : 13;
   const sym = `700 ${sz}px ${FONT}`, num = `800 ${sz}px ${FONT}`, unit = `600 ${sz - 1}px ${FONT}`;
   pill(X(uc + TUBE_OFFS[0]), y, [['v₁', 'ltr', sym, C.muted], ['=', 'ltr', sym, C.muted], [f(cur.v1, 2), 'ltr', num, C.kinInk], ['م/ث', 'rtl', unit, C.muted]]);
-  pill(X(uc), y, [['v₂', 'ltr', sym, C.muted], ['=', 'ltr', sym, C.muted], [f(cur.v2, 2), 'ltr', num, C.kinInk], ['م/ث', 'rtl', unit, C.muted]], cur.tubes[2].air ? C.danger : C.kin);
+  if (cur.cav) pill(X(uc), y, [['تكهّف: الماء يغلي', 'rtl', num, C.cav]], C.cav);
+  else pill(X(uc), y, [['v₂', 'ltr', sym, C.muted], ['=', 'ltr', sym, C.muted], [f(cur.v2, 2), 'ltr', num, C.kinInk], ['م/ث', 'rtl', unit, C.muted]], cur.tubes[2].air ? C.danger : C.kin);
 }
 
 function draw() {
@@ -691,11 +743,12 @@ function draw() {
   drawPipe(pr);
   drawParticles();
   for (const b of bubbles) if (b.tube < 0) bubble(X(b.u), axisY - b.e * rAtU(b.u) * s + Math.sin(b.wob), b.rad);
+  drawVapor();
   drawWalls(pr);
   edgeFade();
   drawTubes();
   drawHandle();
-  if (showEnergy) drawEnergy(pr);
+  if (showEnergy && !cur.cav) drawEnergy(pr);
   drawRuler();
   drawReadings();
   drawLabels();
@@ -722,6 +775,7 @@ function syncSliders() {
 
 function statusHTML(sol, d) {
   const t1 = sol.tubes[0], t2 = sol.tubes[2];
+  if (sol.cav) return ['cav', `🫧 تكهّف! أخفض ضغط في المنتصف وصل إلى ضغط بخار الماء (${b(f(P_VAP / 1000, 2))} كيلوباسكال مطلق، أي ${b(f((P_VAP - P_ATM) / 1000, 2))} فوق الجوي)، فبدأ الماء يغلي من قلّة الضغط وتتكوّن فقاعات بخار تنهار بعد العنق. هنا لا يصح النموذج البسيط، لذلك أوقفنا الحساب. وسّع المنتصف أو خفّف السرعة لترجع.`];
   if (sol.v1 === 0) return ['', '💤 الماء واقف: لا توجد سرعة، فالضغط متساوٍ في كل مكان — لاحظ أن كل الأنابيب على الارتفاع نفسه.'];
   if (t2.air) {
     const pTap = (t2.p - RHO * G * t2.r) / 1000;
@@ -762,6 +816,11 @@ function update() {
     else { c.className = ''; c.innerHTML = `${b(f(t.h * 100, 1))} <span class="u">سم</span>`; }
   };
   hcell('o_h1', t1); hcell('o_h2', t2);
+  ['sec2', 'eqB', 'eqC'].forEach((id) => $(id).classList.toggle('cav', cur.cav));
+  if (cur.cav) {   // لا نعرض أرقامًا مستحيلة
+    set('o_v2', '—'); set('o_p2', '—'); $('o_p2n').textContent = '';
+    const c = $('o_h2'); c.className = 'cavv'; c.textContent = 'تكهّف — توقّف الحساب';
+  }
   set('e_p1', f(d.p1, 2)); set('e_k1', f(d.k1, 2)); set('e_p2', f(d.p2, 2)); set('e_k2', f(d.k2, 2));
   set('e_t1', f(d.E, 2)); set('e_t2', f(d.E, 2));
   // أشرطة الطاقة
