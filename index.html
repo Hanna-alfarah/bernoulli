@@ -21,24 +21,26 @@
 <style>
 :root{
   --bg:#eef3f9; --card:#ffffff; --ink:#0f1d2e; --muted:#5b6c82; --line:#dce5f0; --soft:#f1f6fc; --chip:#e3effc;
-  --accent:#0b74d1; --press:#1d78d6; --press-ink:#1462b3; --kin:#f08c00; --kin-ink:#b45f00;
+  --accent:#0b74d1; --accent-ink:#ffffff; --press:#1d78d6; --press-ink:#1462b3; --kin:#f08c00; --kin-ink:#b45f00;
   --danger:#e03c3c; --danger-soft:#fdecec; --danger-ink:#b42323; --ok:#14995a; --ok-soft:#e6f6ee;
   --cav:#7c3aed; --cav-soft:#f1eafe; --cav-ink:#5b21b6;
-  --track:#d9e3ef; --stage:#f6f9fd; --grid:rgba(20,60,110,.10);
+  --track:#d9e3ef; --stage:#f3f7fc; --stage-hi:#ffffff; --grid:rgba(20,60,110,.10);
   --water1:#7cc6ff; --water2:#2b8ce0; --water3:#1565b8;
   --wall:rgba(98,118,142,.85); --glass:rgba(140,175,210,.20); --glass-edge:rgba(80,110,145,.65);
+  --metal1:#eef2f7; --metal2:#8e9cad;
   --shadow:0 1px 2px rgba(16,32,60,.06), 0 10px 28px rgba(16,32,60,.07);
   color-scheme:light;
 }
 @media (prefers-color-scheme: dark){
   :root{
     --bg:#0a111d; --card:#111a29; --ink:#e7eef7; --muted:#97a7bc; --line:#213049; --soft:#152136; --chip:#14304f;
-    --accent:#4aa8ff; --press:#4aa3ff; --press-ink:#8cc6ff; --kin:#ffa940; --kin-ink:#ffbd66;
+    --accent:#4aa8ff; --accent-ink:#06121f; --press:#4aa3ff; --press-ink:#8cc6ff; --kin:#ffa940; --kin-ink:#ffbd66;
     --danger:#ff6464; --danger-soft:#3a1717; --danger-ink:#ffa0a0; --ok:#3ccf8a; --ok-soft:#10301f;
     --cav:#b48cff; --cav-soft:#251a3d; --cav-ink:#cbb2ff;
-    --track:#24344d; --stage:#0d1624; --grid:rgba(160,200,255,.08);
+    --track:#24344d; --stage:#0c1522; --stage-hi:#15233b; --grid:rgba(160,200,255,.08);
     --water1:#5ab4ff; --water2:#1f78cc; --water3:#0f4f94;
     --wall:rgba(150,170,195,.75); --glass:rgba(150,190,240,.10); --glass-edge:rgba(170,200,235,.5);
+    --metal1:#7d8da3; --metal2:#2b394c;
     --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 28px rgba(0,0,0,.25);
     color-scheme:dark;
   }
@@ -48,17 +50,36 @@ html{-webkit-text-size-adjust:100%}
 body{margin:0;font-family:"Cairo",system-ui,"Segoe UI",Tahoma,sans-serif;background:var(--bg);color:var(--ink);line-height:1.75;font-size:16px}
 bdi{unicode-bidi:isolate;direction:ltr}
 .wrap{max-width:1000px;margin:0 auto;padding:0 16px}
-.hero{padding:22px 0 6px;background:radial-gradient(700px 220px at 85% -40px, color-mix(in srgb, var(--water1) 35%, transparent), transparent 70%)}
+.hero{padding:20px 0 4px;background:radial-gradient(700px 240px at 85% -40px, color-mix(in srgb, var(--water1) 35%, transparent), transparent 70%)}
 .kicker{display:inline-block;font-size:13px;font-weight:700;color:var(--accent);background:var(--chip);padding:2px 12px;border-radius:999px}
 h1{font-size:clamp(26px,6vw,40px);line-height:1.35;margin:10px 0 6px;font-weight:800}
 h1 .grad{background:linear-gradient(270deg,var(--water2),var(--kin));-webkit-background-clip:text;background-clip:text;color:transparent}
-.lede{color:var(--muted);margin:0 0 6px;max-width:62ch}
+.lede{color:var(--muted);margin:0 0 8px;max-width:62ch}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px}
+.chips span{font-size:12.5px;font-weight:700;color:var(--muted);background:var(--card);border:1px solid var(--line);padding:1px 10px;border-radius:99px}
 h2{font-size:22px;margin:0 0 10px;font-weight:800}
 h3{font-size:17px;margin:0 0 8px;font-weight:800;display:flex;align-items:center;gap:8px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}
 .lab{padding:12px;margin-top:10px}
+/* الجولة */
+.tour{margin:0 0 10px;padding:12px 14px;border-radius:14px;background:linear-gradient(135deg,var(--chip),var(--soft));border:1px solid var(--line)}
+.tour[hidden]{display:none}
+.tour-top{display:flex;align-items:center;gap:8px}
+.tour-top .lbl{font-weight:800;font-size:13.5px;color:var(--accent);white-space:nowrap}
+.dots{display:flex;gap:5px;flex:1;align-items:center}
+.dots i{width:7px;height:7px;border-radius:99px;background:var(--track);transition:all .3s}
+.dots i.on{background:var(--accent);width:20px}
+.dots i.done{background:color-mix(in srgb,var(--accent) 45%,var(--track))}
+.tstep{font-size:12.5px;font-weight:700;color:var(--muted)}
+.tour p{margin:6px 0 10px;font-weight:700;font-size:16px;line-height:1.8;min-height:3.6em}
+.tour p.fade{animation:fadeUp .4s ease-out}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.tour-btns{display:flex;gap:8px;justify-content:flex-end}
+.linkbtn{background:none;border:0;color:var(--muted);font:inherit;font-size:13px;font-weight:700;cursor:pointer;padding:2px 6px;border-radius:8px}
+.linkbtn:hover{color:var(--accent)}
+/* المسرح */
 .stage-head{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;color:var(--muted);padding:0 4px 6px;font-weight:600}
-.stage{position:relative;border-radius:14px;background:var(--stage);overflow:hidden;border:1px solid var(--line)}
+.stage{position:relative;border-radius:14px;background:radial-gradient(120% 90% at 50% 0%,var(--stage-hi),var(--stage) 70%);overflow:hidden;border:1px solid var(--line)}
 canvas{display:block;width:100%;touch-action:pan-y;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
 .stage.dragging canvas{cursor:ns-resize}
 .hint{position:absolute;left:0;top:0;display:flex;flex-direction:column;align-items:center;pointer-events:none;transform:translateX(-50%);animation:nudge 1.6s ease-in-out infinite;transition:opacity .3s}
@@ -68,11 +89,36 @@ canvas{display:block;width:100%;touch-action:pan-y;user-select:none;-webkit-user
 @keyframes nudge{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,7px)}}
 .tip{position:absolute;left:0;top:0;transform:translate(-50%,-100%);background:var(--ink);color:var(--card);font-weight:800;font-size:14px;padding:3px 12px;border-radius:10px;pointer-events:none;opacity:0;transition:opacity .15s;white-space:nowrap}
 .tip.show{opacity:1}
-.status{margin:10px 0 2px;padding:10px 12px;border-radius:12px;background:var(--soft);font-size:15px;font-weight:600;min-height:3.4em;line-height:1.8}
+.legend2{display:flex;flex-wrap:wrap;justify-content:center;gap:2px 14px;font-size:12px;color:var(--muted);font-weight:600;margin-top:6px}
+.legend2 .dot{display:inline-block;width:9px;height:9px;border-radius:50%;vertical-align:0;margin-inline-end:4px}
+.dot.slow{background:#fff;box-shadow:0 0 0 1px var(--glass-edge),0 0 6px #9fd4ff}
+.dot.fast{background:#ffb937;box-shadow:0 0 6px #ffb937}
+/* الحالة والمقاييس */
+.status{margin:10px 0 2px;padding:10px 12px;border-radius:12px;background:var(--soft);min-height:4.4em;line-height:1.8;transition:background .3s,color .3s}
+.status .big{display:block;font-size:16.5px;font-weight:800}
+.status .small{display:block;font-size:14px;font-weight:600;opacity:.9}
 .status.warn{background:var(--danger-soft);color:var(--danger-ink)}
 .status.cav{background:var(--cav-soft);color:var(--cav-ink)}
-.controls{display:grid;grid-template-columns:1fr;gap:2px 22px;margin-top:6px}
-@media (min-width:760px){.controls{grid-template-columns:repeat(3,1fr)}}
+.meters{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.meter{background:var(--soft);border-radius:14px;padding:10px 12px;border:1px solid var(--line)}
+.badge{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--ink);color:var(--card);font-size:13px;font-weight:800;flex:none;line-height:1}
+.mh{display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px;font-weight:800;font-size:14.5px;margin-bottom:2px}
+.ratio{margin-inline-start:auto;font-size:12px;font-weight:800;color:var(--kin-ink);background:color-mix(in srgb,var(--kin) 18%,transparent);padding:0 8px;border-radius:99px}
+.ratio:empty{display:none}
+.mrow{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:0 6px;font-size:13px;font-weight:700;color:var(--muted);margin-top:6px}
+.mrow b{font-size:16px;font-variant-numeric:tabular-nums}
+.mrow b.k{color:var(--kin-ink)} .mrow b.p{color:var(--press-ink)}
+.mrow small{font-size:10.5px;color:var(--muted);font-weight:600}
+.mbar{height:10px;border-radius:99px;background:var(--track);overflow:hidden;margin-top:2px}
+.mbar i{display:block;height:100%;border-radius:99px;width:0;transition:width .2s ease-out}
+.mbar i.k{background:linear-gradient(to left,#ffd27a,var(--kin))}
+.mbar i.p{background:linear-gradient(to left,#8fd0ff,var(--press))}
+.mnote{display:block;font-size:11.5px;color:var(--danger-ink);font-weight:700;margin-top:4px}
+.mnote:empty{display:none}
+.meter.cav .mrow b{color:var(--cav-ink)} .meter.cav .mnote{color:var(--cav-ink)}
+/* التحكم */
+.controls{display:grid;grid-template-columns:1fr;gap:2px 22px;margin-top:8px}
+@media (min-width:760px){.controls{grid-template-columns:1fr 1fr}}
 .ctl{padding:4px 2px}
 .ctl-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
 .ctl label{font-weight:700;font-size:15px}
@@ -86,30 +132,31 @@ input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 5px color
 input[type=range]::-moz-range-track{height:8px;border-radius:99px;background:var(--track)}
 input[type=range]::-moz-range-progress{height:8px;border-radius:99px;background:var(--accent)}
 input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--card);border:3px solid var(--accent)}
-.row-btns{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-top:6px;grid-column:1/-1}
-.switch{display:inline-flex;align-items:center;gap:10px;font-weight:700;font-size:14.5px;cursor:pointer;user-select:none}
+details.adv{grid-column:1/-1;border-top:1px dashed var(--line);margin-top:4px;padding-top:6px}
+details.adv summary{cursor:pointer;font-weight:700;font-size:14.5px;color:var(--muted);padding:4px 2px;list-style:none}
+details.adv summary::-webkit-details-marker{display:none}
+details.adv summary::after{content:" ▾"}
+details.adv[open] summary::after{content:" ▴"}
+.adv-body{display:grid;grid-template-columns:1fr;gap:6px 22px;align-items:center}
+@media (min-width:760px){.adv-body{grid-template-columns:1fr 1fr}}
+.row-btns{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin-top:8px;grid-column:1/-1}
+.switch{display:inline-flex;align-items:center;gap:10px;font-weight:700;font-size:14.5px;cursor:pointer;user-select:none;padding:4px 2px}
 .switch input{position:absolute;opacity:0;pointer-events:none}
 .switch .sw{width:44px;height:26px;border-radius:99px;background:var(--track);position:relative;transition:background .2s;flex:none}
 .switch .sw::after{content:"";position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:var(--card);box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .2s}
 .switch input:checked + .sw{background:var(--kin)}
 .switch input:checked + .sw::after{transform:translateX(-18px)}
 .switch input:focus-visible + .sw{outline:3px solid color-mix(in srgb,var(--accent) 40%,transparent)}
-.btn{font:inherit;font-weight:700;font-size:14.5px;border:1px solid var(--line);background:var(--soft);color:var(--ink);border-radius:12px;padding:6px 14px;cursor:pointer}
+.btn{font:inherit;font-weight:700;font-size:14.5px;border:1px solid var(--line);background:var(--soft);color:var(--ink);border-radius:12px;padding:6px 14px;cursor:pointer;transition:transform .1s,border-color .2s}
 .btn:hover{border-color:var(--accent)}
-.results{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-.results .wide{grid-column:1/-1}
-@media (min-width:860px){.results{grid-template-columns:1fr 1fr 2fr}.results .wide{grid-column:auto}.results .wide.full{grid-column:1/-1}}
-.sec{padding:12px 14px}
-.badge{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--ink);color:var(--card);font-size:13px;font-weight:800;flex:none;line-height:1}
-.kv{margin:0;display:grid;gap:4px}
-.kv>div{display:flex;flex-direction:column;border-top:1px dashed var(--line);padding-top:4px}
-.kv>div:first-child{border-top:0;padding-top:0}
-.kv dt{font-size:12.5px;color:var(--muted);font-weight:600}
-.kv dd{margin:0;font-weight:800;font-size:16px}
-.kv dd .u{font-weight:600;font-size:13px;color:var(--muted)}
-.kv .p{color:var(--press-ink)} .kv .k{color:var(--kin-ink)}
-.kv dd.air{color:var(--danger-ink)}
-.neg{font-size:11.5px;font-weight:700;color:var(--danger-ink)}
+.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.45;cursor:default}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn[hidden]{display:none}
+/* الأقسام */
+.sec-title{margin:22px 4px 10px}
+.results{display:grid;grid-template-columns:1fr;gap:10px}
+@media (min-width:860px){.results{grid-template-columns:1fr 1fr}}
 .eqcard{padding:12px 14px}
 .eq{font-size:clamp(15px,4.2vw,19px);text-align:center;font-weight:700;background:var(--soft);border-radius:12px;padding:8px 6px;line-height:1.9;font-variant-numeric:tabular-nums}
 .eq .sym{color:var(--muted);font-weight:600}
@@ -129,21 +176,24 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
 .cavnote{display:none;margin:0;padding:10px 12px;border-radius:12px;background:var(--cav-soft);color:var(--cav-ink);font-weight:700;font-size:14.5px}
 .cav .cavnote{display:block}
 .eqcard.cav .eq,.eqcard.cav .bars,.eqcard.cav .legend,.eqcard.cav .note{display:none}
-.sec.cav .x .u,.sec.cav .neg{display:none}
-.kv dd.cavv{color:var(--cav-ink)}
 .block{padding:16px;margin-top:14px}
 .ch{list-style:none;margin:0;padding:0;display:grid;gap:8px}
 .ch li{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:12px;background:var(--soft);transition:background .3s}
 .ch li small{display:block;color:var(--muted);font-weight:600;font-size:13px}
 .tick{flex:none;width:24px;height:24px;border-radius:50%;border:2px solid var(--line);margin-top:2px;display:grid;place-items:center;font-size:14px;color:#fff;transition:all .3s}
 .ch li.done{background:var(--ok-soft)}
-.ch li.done .tick{background:var(--ok);border-color:var(--ok)}
+.ch li.done .tick{background:var(--ok);border-color:var(--ok);transform:scale(1.1)}
 .ch li.done .tick::after{content:"✓";font-weight:800}
 .count{font-size:14px;font-weight:700;color:var(--muted);background:var(--soft);padding:0 10px;border-radius:99px;margin-inline-start:6px}
 .explain{display:grid;grid-template-columns:1fr;gap:12px;margin-top:14px}
 @media (min-width:760px){.explain{grid-template-columns:1fr 1fr}.explain .full{grid-column:1/-1}}
 .explain .card{padding:16px}
 .explain p{margin:6px 0}
+.simple{background:linear-gradient(135deg,var(--card),var(--chip))}
+ol.steps{margin:4px 0 0;padding-inline-start:22px}
+ol.steps li{margin:8px 0;padding-inline-start:4px}
+ol.steps li::marker{font-weight:800;color:var(--accent)}
+.takeaway{font-size:18px;font-weight:800;text-align:center;background:var(--card);border:1px dashed var(--accent);border-radius:12px;padding:8px;margin-top:10px!important}
 .num{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:10px;background:var(--chip);color:var(--accent);font-weight:800;flex:none}
 .formula{direction:ltr;text-align:center;font-size:clamp(19px,5vw,24px);font-weight:800;background:var(--soft);border-radius:12px;padding:8px;margin:10px 0}
 .symbols{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;font-size:14.5px;margin:6px 0}
@@ -164,12 +214,12 @@ ul.life li{margin:4px 0}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 footer{color:var(--muted);font-size:13px;text-align:center;padding:22px 0 30px}
 footer a{color:var(--accent)}
-@media (max-width:420px){.lab{padding:9px}.sec,.eqcard{padding:10px}.kv dd{font-size:15px}}
-@media (prefers-reduced-motion: reduce){.hint{animation:none}}
+@media (max-width:420px){.hero{padding-top:14px}.chips{display:none}.lede{font-size:15px}.lab{padding:9px}.eqcard{padding:10px}.meter{padding:9px 10px}.tour{padding:10px 12px}.tour p{font-size:15.5px}}
+@media (prefers-reduced-motion: reduce){.hint{animation:none}.tour p.fade{animation:none}}
 /* وضع صورة المشاركة (og.png) */
 .og body{width:1200px;height:630px;overflow:hidden}
 .og .wrap{max-width:1200px;padding:0 40px}
-.og main>:not(.lab),.og .controls,.og .status,.og .hint,.og footer,.og .lede,.og h1 br{display:none!important}
+.og main>:not(.lab),.og .controls,.og .status,.og .meters,.og .legend2,.og .tour,.og .hint,.og footer,.og .lede,.og .chips,.og h1 br{display:none!important}
 .og .hero{padding-top:24px}
 .og h1{font-size:44px;margin:8px 0 0}
 </style>
@@ -179,19 +229,54 @@ footer a{color:var(--accent)}
   <div class="wrap">
     <span class="kicker">💧 تجربة فيزياء تفاعلية</span>
     <h1>معادلة برنولي<br> <span class="grad">أضيق ← أسرع ← ضغط أقل</span></h1>
-    <p class="lede">أمسك جدار الأنبوب بإصبعك وضيّقه أو وسّعه، وغيّر سرعة الماء، ثم راقب الأنابيب الصغيرة فوقه: ارتفاع الماء فيها يُظهر الضغط.</p>
+    <p class="lede">لماذا يجري الماء أسرع في المكان الضيّق؟ ولماذا يقلّ ضغطه هناك؟ جرّبها بإصبعك وشاهد بنفسك.</p>
+    <div class="chips"><span>⏱️ 5 دقائق</span><span>🎯 4 تحدّيات</span><span>🧠 4 أسئلة</span></div>
   </div>
 </header>
 
 <main class="wrap">
   <section class="card lab" aria-label="المختبر">
-    <div class="stage-head"><span>اتجاه جريان الماء ←</span><span>🐢 الحركة على الشاشة أبطأ 5 مرات</span></div>
+    <div class="tour" id="tour">
+      <div class="tour-top">
+        <span class="lbl">🎓 جولة سريعة</span>
+        <span class="dots" id="dots" aria-hidden="true"></span>
+        <span class="tstep" id="tourStep"></span>
+        <button class="linkbtn" id="tourSkip" type="button">تخطَّ ✕</button>
+      </div>
+      <p id="tourText" aria-live="polite"></p>
+      <div class="tour-btns">
+        <button class="btn" id="tourPrev" type="button">→ السابق</button>
+        <button class="btn primary" id="tourNext" type="button">التالي ←</button>
+      </div>
+    </div>
+
+    <div class="stage-head"><span>اتجاه جريان الماء ←</span><span>🐢 الحركة على الشاشة أبطأ 3 مرات</span></div>
     <div class="stage" id="stage">
       <canvas id="cv" role="img" aria-label="أنبوب ماء أفقي يضيق في منتصفه، وفوقه خمسة أنابيب صغيرة يرتفع فيها الماء حسب الضغط"></canvas>
-      <div class="hint" id="hint" aria-hidden="true"><span class="finger">👆</span><span class="hint-txt">اسحب جدار الأنبوب ↕</span></div>
+      <div class="hint gone" id="hint" aria-hidden="true"><span class="finger">👆</span><span class="hint-txt">اسحب جدار الأنبوب ↕</span></div>
       <div class="tip" id="tip" aria-hidden="true"></div>
     </div>
-    <p class="status" id="status"></p>
+    <div class="legend2"><span><i class="dot slow"></i>قطرة بطيئة</span><span><i class="dot fast"></i>قطرة سريعة</span><span>السهم الأبيض الأطول = أسرع</span></div>
+
+    <div class="status" id="status"></div>
+
+    <div class="meters" aria-label="مقارنة السرعة والضغط">
+      <div class="meter">
+        <div class="mh"><span class="badge">1</span> عند المدخل</div>
+        <div class="mrow"><span>🏃 السرعة</span><b class="k"><bdi id="m_v1"></bdi> <small>م/ث</small></b></div>
+        <div class="mbar"><i class="k" id="mb_v1"></i></div>
+        <div class="mrow"><span>💪 الضغط</span><b class="p"><bdi id="m_p1"></bdi> <small>كيلوباسكال</small></b></div>
+        <div class="mbar"><i class="p" id="mb_p1"></i></div>
+      </div>
+      <div class="meter" id="meter2">
+        <div class="mh"><span class="badge">2</span> في المنتصف <span class="ratio" id="m_ratio"></span></div>
+        <div class="mrow"><span>🏃 السرعة</span><b class="k"><bdi id="m_v2"></bdi> <small>م/ث</small></b></div>
+        <div class="mbar"><i class="k" id="mb_v2"></i></div>
+        <div class="mrow"><span>💪 الضغط</span><b class="p"><bdi id="m_p2"></bdi> <small>كيلوباسكال</small></b></div>
+        <div class="mbar"><i class="p" id="mb_p2"></i></div>
+        <span class="mnote" id="m_n2"></span>
+      </div>
+    </div>
 
     <div class="controls">
       <div class="ctl">
@@ -204,62 +289,21 @@ footer a{color:var(--accent)}
         <input type="range" id="v1" min="0" max="1.8" step="0.05" value="0.6">
         <div class="ends"><span>واقف</span><span>سريع</span></div>
       </div>
-      <div class="ctl">
-        <div class="ctl-top"><label for="p1">ضغط الماء عند المدخل P₁</label><output id="p1o" for="p1"></output></div>
-        <input type="range" id="p1" min="1" max="3.5" step="0.1" value="3">
-        <div class="ends"><span>منخفض</span><span>مرتفع</span></div>
-      </div>
+      <details class="adv">
+        <summary>⚙️ إعدادات إضافية (للمتقدّمين)</summary>
+        <div class="adv-body">
+          <div class="ctl">
+            <div class="ctl-top"><label for="p1">ضغط الماء عند المدخل P₁</label><output id="p1o" for="p1"></output></div>
+            <input type="range" id="p1" min="1" max="3.5" step="0.1" value="3">
+            <div class="ends"><span>منخفض</span><span>مرتفع</span></div>
+          </div>
+          <label class="switch"><input type="checkbox" id="eline"><span class="sw"></span>أظهر خط الطاقة وخط الضغط</label>
+        </div>
+      </details>
       <div class="row-btns">
-        <label class="switch"><input type="checkbox" id="eline"><span class="sw"></span>أظهر خط الطاقة وخط الضغط</label>
+        <button class="btn" id="tourOpen" type="button" hidden>🎓 الجولة من البداية</button>
         <button class="btn" id="reset" type="button">↺ إعادة الضبط</button>
       </div>
-    </div>
-  </section>
-
-  <section class="results" aria-label="الأرقام">
-    <div class="card sec">
-      <h3><span class="badge">1</span> عند المدخل</h3>
-      <dl class="kv">
-        <div><dt>القطر d₁</dt><dd><bdi id="o_d1"></bdi> <span class="u">سم</span></dd></div>
-        <div><dt>المساحة A₁</dt><dd><bdi id="o_a1"></bdi> <span class="u">سم²</span></dd></div>
-        <div><dt>السرعة v₁</dt><dd class="k"><bdi id="o_v1"></bdi> <span class="u">م/ث</span></dd></div>
-        <div><dt>الضغط P₁</dt><dd class="p"><bdi id="o_p1"></bdi> <span class="u">كيلوباسكال</span></dd></div>
-        <div><dt>ارتفاع الماء h₁</dt><dd id="o_h1"></dd></div>
-      </dl>
-    </div>
-    <div class="card sec" id="sec2">
-      <h3><span class="badge">2</span> في المنتصف</h3>
-      <dl class="kv">
-        <div><dt>القطر d₂</dt><dd><bdi id="o_d2"></bdi> <span class="u">سم</span></dd></div>
-        <div><dt>المساحة A₂</dt><dd><bdi id="o_a2"></bdi> <span class="u">سم²</span></dd></div>
-        <div><dt>السرعة v₂</dt><dd class="k x"><bdi id="o_v2"></bdi> <span class="u">م/ث</span></dd></div>
-        <div><dt>الضغط P₂</dt><dd class="p x"><bdi id="o_p2"></bdi> <span class="u">كيلوباسكال</span> <span class="neg" id="o_p2n"></span></dd></div>
-        <div><dt>ارتفاع الماء h₂</dt><dd id="o_h2"></dd></div>
-      </dl>
-    </div>
-    <div class="card eqcard wide" id="eqB">
-      <h3>معادلة برنولي بالأرقام</h3>
-      <p class="cavnote">⛔ هنا لا تصح معادلة برنولي البسيطة: الماء في المنتصف يغلي من قلّة الضغط (تكهّف) ويتحوّل جزء منه إلى بخار، لذلك أوقفنا الحساب بدل عرض أرقام مستحيلة.</p>
-      <div class="eq" dir="ltr">
-        <div class="sym">P₁ + ½ρv₁² = P₂ + ½ρv₂²</div>
-        <div><span class="p" id="e_p1"></span> + <span class="k" id="e_k1"></span> = <span class="p" id="e_p2"></span> + <span class="k" id="e_k2"></span></div>
-        <div class="tot"><span id="e_t1"></span> = <span id="e_t2"></span> <span class="sym">kPa</span> <span class="ok">✓</span></div>
-      </div>
-      <div class="bars" aria-hidden="true">
-        <div class="bar-row"><span>عند 1</span><div class="track"><div class="seg p" id="b1p"></div><div class="seg k" id="b1k"></div></div></div>
-        <div class="bar-row"><span>عند 2</span><div class="track"><div class="seg p" id="b2p"></div><div class="seg k" id="b2k"></div><div class="seg neg" id="b2n"></div></div></div>
-      </div>
-      <div class="legend"><span><i style="background:var(--press)"></i>طاقة الضغط P</span><span><i style="background:var(--kin)"></i>طاقة الحركة <bdi>½ρv²</bdi></span><span>المجموع نفسه دائمًا</span></div>
-      <p class="note">الضغط هنا هو الضغط فوق الضغط الجوي. كثافة الماء ρ = 1000 كغ/م³.</p>
-    </div>
-    <div class="card eqcard wide full" id="eqC">
-      <h3>قانون الاستمرارية: ما يدخل = ما يخرج</h3>
-      <p class="cavnote">⛔ مع فقاعات البخار لم يعد في الأنبوب ماء سائل فقط، فلا يصح الحساب البسيط هنا.</p>
-      <div class="eq" dir="ltr">
-        <div class="sym">A₁ v₁ = A₂ v₂ &nbsp;⇒&nbsp; v₂ = v₁ × (A₁ ÷ A₂)</div>
-        <div id="c_line"></div>
-      </div>
-      <p class="note" id="c_q"></p>
     </div>
   </section>
 
@@ -274,6 +318,15 @@ footer a{color:var(--accent)}
   </section>
 
   <section class="explain" aria-label="الشرح">
+    <div class="card full simple">
+      <h3><span class="num">💡</span> الفكرة بكلمات بسيطة</h3>
+      <ol class="steps">
+        <li><b>الماء لا ينضغط:</b> كل ثانية تمرّ كمية الماء نفسها من كل مكان في الأنبوب. في المكان الضيّق لا تمرّ هذه الكمية إلا إذا أسرع الماء — مثل النهر الذي يجري أسرع حيث يضيق مجراه.</li>
+        <li><b>الماء يحتاج دفعة لكي يُسرع:</b> الضغط هو «الدفع». لكي يُسرع الماء وهو يدخل المكان الضيّق، يجب أن يكون الضغط خلفه أكبر من الضغط أمامه، لذلك يكون الضغط في المكان الضيّق أقل.</li>
+        <li><b>الأنابيب الصغيرة تُرينا الضغط:</b> الضغط الأكبر يدفع الماء أعلى فيها، لذلك ينزل الماء في الأنبوب 2 عندما يضيق المنتصف.</li>
+      </ol>
+      <p class="takeaway">✨ الخلاصة: أضيق ← أسرع ← ضغط أقل</p>
+    </div>
     <div class="card">
       <h3><span class="num">1</span> لماذا يُسرع الماء في المكان الضيّق؟</h3>
       <p>الماء تقريبًا لا ينضغط، لذلك كمية الماء التي تدخل الأنبوب كل ثانية يجب أن تمرّ من كل مقطع فيه. إذا صغرت مساحة المقطع، لا يمكن أن يمرّ الحجم نفسه إلا إذا جرى الماء أسرع. هذا هو <b>قانون الاستمرارية</b>:</p>
@@ -285,7 +338,6 @@ footer a{color:var(--accent)}
       <p>لكل كمية من الماء «ميزانية طاقة» ثابتة (إذا أهملنا الاحتكاك): جزء على شكل ضغط، وجزء على شكل حركة، وجزء بسبب الارتفاع. هذه هي <b>معادلة برنولي</b>:</p>
       <div class="formula">P + ½ρv² + ρgh = ثابت</div>
       <p>أنبوبنا أفقي فلا يتغيّر الارتفاع، فإذا كبرت طاقة الحركة <bdi>½ρv²</bdi> يجب أن ينقص الضغط P بالمقدار نفسه.</p>
-      <p>وبطريقة أخرى: لكي يتسارع الماء وهو يدخل المنطقة الضيّقة، يجب أن يدفعه من الخلف ضغطٌ أكبر من الضغط الذي أمامه.</p>
       <div class="symbols">
         <b>P</b><span>الضغط (باسكال)</span>
         <b>ρ</b><span>كثافة الماء = 1000 كغ/م³</span>
@@ -316,8 +368,37 @@ footer a{color:var(--accent)}
         <li>اعتبرنا الماء لا ينضغط وبلا احتكاك، والجريان هادئًا ومستقرًا، وسرعة الماء متساوية في كل المقطع.</li>
         <li>لذلك يعود الماء في الأنبوب 3 إلى ارتفاع الأنبوب 1 نفسه. في الأنابيب الحقيقية يكون أقل قليلًا لأن الاحتكاك يستهلك جزءًا من الطاقة.</li>
         <li><b>التكهّف:</b> الضغط لا يمكن أن ينخفض بلا حدود. عندما يصل إلى <b>ضغط بخار الماء</b> (نحو 2.3 كيلوباسكال مطلق عند 20°م، أي نحو 99 كيلوباسكال تحت الضغط الجوي) يبدأ الماء يغلي وهو بارد وتتكوّن فقاعات بخار، ثم تنهار عندما يرتفع الضغط بعد العنق، وقد تُتلف الأنابيب والمضخّات مع الوقت. عندها لا تصح معادلة برنولي البسيطة، لذلك توقف الصفحة الحساب وتعرض رسالة.</li>
-        <li>الضغط المعروض هو الضغط فوق الضغط الجوي. والرسم بمقياس حقيقي: الأقطار والارتفاعات بالمقياس نفسه، لكن حركة الماء على الشاشة أبطأ 5 مرات لكي تراها.</li>
+        <li>الضغط المعروض هو الضغط فوق الضغط الجوي. والرسم بمقياس حقيقي: الأقطار والارتفاعات بالمقياس نفسه، لكن حركة الماء على الشاشة أبطأ 3 مرات لكي تراها. تأرجح الماء في الأنابيب الصغيرة قبل أن يستقرّ يحدث في الأنابيب الحقيقية أيضًا.</li>
       </ul>
+    </div>
+  </section>
+
+  <h2 class="sec-title">📐 للمتقدّمين: المعادلات بالأرقام</h2>
+  <section class="results" aria-label="المعادلات بالأرقام">
+    <div class="card eqcard" id="eqB">
+      <h3>معادلة برنولي بالأرقام</h3>
+      <p class="cavnote">⛔ هنا لا تصح معادلة برنولي البسيطة: الماء في المنتصف يغلي من قلّة الضغط (تكهّف) ويتحوّل جزء منه إلى بخار، لذلك أوقفنا الحساب بدل عرض أرقام مستحيلة.</p>
+      <div class="eq" dir="ltr">
+        <div class="sym">P₁ + ½ρv₁² = P₂ + ½ρv₂²</div>
+        <div><span class="p" id="e_p1"></span> + <span class="k" id="e_k1"></span> = <span class="p" id="e_p2"></span> + <span class="k" id="e_k2"></span></div>
+        <div class="tot"><span id="e_t1"></span> = <span id="e_t2"></span> <span class="sym">kPa</span> <span class="ok">✓</span></div>
+      </div>
+      <div class="bars" aria-hidden="true">
+        <div class="bar-row"><span>عند 1</span><div class="track"><div class="seg p" id="b1p"></div><div class="seg k" id="b1k"></div></div></div>
+        <div class="bar-row"><span>عند 2</span><div class="track"><div class="seg p" id="b2p"></div><div class="seg k" id="b2k"></div><div class="seg neg" id="b2n"></div></div></div>
+      </div>
+      <div class="legend"><span><i style="background:var(--press)"></i>طاقة الضغط P</span><span><i style="background:var(--kin)"></i>طاقة الحركة <bdi>½ρv²</bdi></span><span>المجموع نفسه دائمًا</span></div>
+      <p class="note">الضغط هنا هو الضغط فوق الضغط الجوي. كثافة الماء ρ = 1000 كغ/م³.</p>
+    </div>
+    <div class="card eqcard" id="eqC">
+      <h3>قانون الاستمرارية: ما يدخل = ما يخرج</h3>
+      <p class="cavnote">⛔ مع فقاعات البخار لم يعد في الأنبوب ماء سائل فقط، فلا يصح الحساب البسيط هنا.</p>
+      <div class="eq" dir="ltr">
+        <div class="sym">A₁ v₁ = A₂ v₂ &nbsp;⇒&nbsp; v₂ = v₁ × (A₁ ÷ A₂)</div>
+        <div id="c_area"></div>
+        <div id="c_line"></div>
+      </div>
+      <p class="note" id="c_q"></p>
     </div>
   </section>
 
@@ -350,7 +431,7 @@ const LT = 0.10, LC = 0.16;            // طول العنق، وطول منطق�
 const TUBE_OFFS = [-0.27, -0.13, 0, 0.13, 0.27]; // أماكن الأنابيب الصغيرة بالنسبة لمنتصف العنق (م)
 const BADGES = ['1', '', '2', '', '3'];
 const H_TOP = 0.55;                    // رأس الأنابيب الصغيرة فوق المحور (م)
-const TIME_SCALE = 0.2;                // الحركة على الشاشة أبطأ 5 مرات
+const TIME_SCALE = 1 / 3;              // الحركة على الشاشة أبطأ 3 مرات
 const DEFAULTS = { d2: 0.06, v1: 0.6, p1: 3000 };
 const state = { ...DEFAULTS };
 
@@ -396,11 +477,15 @@ window.bernoulli = { state, solve };
 const cv = $('cv'), ctx = cv.getContext('2d'), stage = $('stage');
 const FONT = '"Cairo", "Segoe UI", Tahoma, sans-serif';
 const TOP_PAD = 30, BOT_PAD = 40, RMAX = D2_MAX / 2;
+const OMEGA = 11, ZETA = 0.5;          // نابض مستوى الماء بالأنابيب: يتأرجح شوي ثم يستقر (مثل الحقيقة)
 const isOG = /[?&]og\b/.test(location.search);
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 if (isOG) document.documentElement.classList.add('og');
 let W = 0, H = 0, s = 400, axisY = 0, uc = 0, worldW = 1, rulerW = 32, dpr = 1, wallPx = 4, tubeW = 10, gain = 3;
-let parts = [], bubbles = [], vapor = [], vaporTimer = 0, lv = [0, 0, 0, 0, 0], bubbleTimer = [0, 0, 0, 0, 0];
+let parts = [], bubbles = [], vapor = [], vaporTimer = 0, sprites = [];
+const lv = [0, 0, 0, 0, 0], lvVel = [0, 0, 0, 0, 0], bubbleTimer = [0, 0, 0, 0, 0];
 let cur = solve(), showEnergy = isOG, dragging = false, hovering = false, visible = true, C = {};
+let clock = 0, focus = null, levelsReady = false, tween = null;
 
 const X = (u) => W - u * s;            // الماء يجري من اليمين إلى اليسار
 const rAtU = (u) => radiusAtOffset(u - uc);
@@ -414,7 +499,23 @@ function readColors() {
     glassEdge: g('--glass-edge'), grid: g('--grid'), ink: g('--ink'), muted: g('--muted'), card: g('--card'),
     line: g('--line'), kin: g('--kin'), kinInk: g('--kin-ink'), press: g('--press'), pressInk: g('--press-ink'),
     danger: g('--danger'), accent: g('--accent'), stage: g('--stage'), cav: g('--cav'),
+    metal1: g('--metal1'), metal2: g('--metal2'),
   };
+}
+
+// صور جاهزة لقطرات مضيئة (أسرع من رسم توهّج لكل قطرة)
+function makeSprites() {
+  sprites = [];
+  for (let k = 0; k < 8; k++) {
+    const t = k / 7, c = [255, Math.round(255 - 70 * t), Math.round(255 - 200 * t)].join(',');
+    const sz = Math.ceil(14 * dpr), o = document.createElement('canvas');
+    o.width = o.height = sz;
+    const g = o.getContext('2d'), gr = g.createRadialGradient(sz / 2, sz / 2, 0, sz / 2, sz / 2, sz / 2);
+    gr.addColorStop(0, `rgba(${c},1)`); gr.addColorStop(0.28, `rgba(${c},0.95)`);
+    gr.addColorStop(0.55, `rgba(${c},0.28)`); gr.addColorStop(1, `rgba(${c},0)`);
+    g.fillStyle = gr; g.fillRect(0, 0, sz, sz);
+    sprites.push({ img: o, trail: `rgba(${c},0.45)` });
+  }
 }
 
 function layout() {
@@ -436,14 +537,18 @@ function layout() {
   dpr = Math.min(window.devicePixelRatio || 1, 2.5);
   cv.style.height = H + 'px';
   cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+  makeSprites();
   initParticles();
-  cur.tubes.forEach((t, i) => { lv[i] = t.air ? t.r : t.h; });
+  if (!levelsReady) {   // أول مرة: الأنابيب تبدأ فاضية وتمتلئ (إلا بصورة المشاركة)
+    cur.tubes.forEach((t, i) => { lv[i] = isOG ? (t.air ? t.r : t.h) : t.r; lvVel[i] = 0; });
+    levelsReady = true;
+  }
   placeHint();
 }
 
 const randEta = () => (Math.random() * 2 - 1) * 0.88;
 function initParticles() {
-  const N = clamp(Math.round(W / 2.6), 90, 360);
+  const N = clamp(Math.round(W / 2.3), 100, 400);
   const rmax = Math.max(R1, state.d2 / 2);
   parts = [];
   let guard = 0;
@@ -455,6 +560,7 @@ function initParticles() {
 }
 
 function step(dt) {
+  clock += dt;
   const vmax = Math.min(cur.vCap, state.v1 * (R1 * R1) / Math.pow(Math.min(R1, state.d2 / 2), 2));
   const n = Math.max(1, Math.ceil(vmax * TIME_SCALE * dt * s / 2.5));
   const h = dt / n;
@@ -463,14 +569,22 @@ function step(dt) {
     adv(p);
     if (p.u > worldW) { p.u = (p.u - worldW) % worldW; p.e = randEta(); }
   }
-  // مستوى الماء بالأنابيب يلحق القيمة الجديدة تدريجيًا (مثل الواقع)
-  const a = 1 - Math.exp(-dt / 0.35);
+  // مستوى الماء بالأنابيب: نابض مُخمَّد يلحق القيمة الجديدة
   // وقت التكهّف نوقف الحساب: الأنابيب بعد المدخل تفضى وتصير باهتة (ما في قيمة صحيحة نعرضها)
-  cur.tubes.forEach((t, i) => { lv[i] += ((t.air || (cur.cav && i > 0) ? t.r : Math.min(t.h, H_TOP)) - lv[i]) * a; });
+  const sub = Math.max(1, Math.ceil(dt / 0.008)), hh = dt / sub;
+  cur.tubes.forEach((t, i) => {
+    const target = (t.air || (cur.cav && i > 0)) ? t.r : Math.min(t.h, H_TOP);
+    for (let k = 0; k < sub; k++) {
+      lvVel[i] += (OMEGA * OMEGA * (target - lv[i]) - 2 * ZETA * OMEGA * lvVel[i]) * hh;
+      lv[i] += lvVel[i] * hh;
+    }
+    if (lv[i] < t.r) { lv[i] = t.r; if (lvVel[i] < 0) lvVel[i] = 0; }
+    if (lv[i] > H_TOP) { lv[i] = H_TOP; lvVel[i] = 0; }
+  });
   // فقاعات الهواء عندما يصير الضغط عند الفتحة أقل من الجوي
   cur.tubes.forEach((t, i) => {
     if (!t.air || cur.cav) { bubbleTimer[i] = 0; return; }
-    bubbleTimer[i] += dt * (2 + 8 * clamp((t.r - t.h) / 0.15, 0.15, 1));
+    bubbleTimer[i] += dt * (3 + 9 * clamp((t.r - t.h) / 0.15, 0.15, 1));
     while (bubbleTimer[i] >= 1) {
       bubbleTimer[i] -= 1;
       if (bubbles.length < 80) bubbles.push({ tube: i, y: H_TOP, u: 0, e: 0.8, rad: 1.6 + Math.random() * 1.8, wob: Math.random() * 6.3 });
@@ -480,7 +594,7 @@ function step(dt) {
     b.wob += dt * 7;
     if (b.tube >= 0) {
       const t = cur.tubes[b.tube];
-      b.y -= 0.28 * dt;
+      b.y -= 0.4 * dt;
       if (b.y <= t.r) { b.u = uc + t.off; b.e = 0.8; b.tube = -1; }
     } else {
       adv(b);
@@ -507,10 +621,10 @@ function profile() {
   return { n, xs, rs };
 }
 // مسار على "نسبة" k من نصف القطر (k=1 الجدار العلوي، k=-1 السفلي)، مع إزاحة للخارج
-function trace(pr, k, off = 0, move = true) {
+function trace(pr, k, off = 0) {
   for (let i = 0; i <= pr.n; i++) {
     const y = axisY - k * pr.rs[i] - Math.sign(k) * off;
-    (i === 0 && move) ? ctx.moveTo(pr.xs[i], y) : ctx.lineTo(pr.xs[i], y);
+    i === 0 ? ctx.moveTo(pr.xs[i], y) : ctx.lineTo(pr.xs[i], y);
   }
 }
 function traceBack(pr, k) { for (let i = pr.n; i >= 0; i--) ctx.lineTo(pr.xs[i], axisY - k * pr.rs[i]); }
@@ -534,26 +648,66 @@ function drawGrid() {
 
 function drawPipe(pr) {
   ctx.beginPath(); trace(pr, 1); traceBack(pr, -1); ctx.closePath();
-  ctx.fillStyle = C.water2; ctx.fill();
+  const g = ctx.createLinearGradient(0, axisY - R1 * s, 0, axisY + R1 * s);
+  g.addColorStop(0, C.water2); g.addColorStop(0.45, C.water2); g.addColorStop(1, C.water3);
+  ctx.fillStyle = g; ctx.fill();
   // لمعة وظل يتبعان شكل الأنبوب ليبدو أسطوانيًا
-  ctx.beginPath(); trace(pr, 0.62); traceBack(pr, 0.22); ctx.closePath(); ctx.fillStyle = 'rgba(255,255,255,0.16)'; ctx.fill();
-  ctx.beginPath(); trace(pr, -0.62); traceBack(pr, -1); ctx.closePath(); ctx.fillStyle = 'rgba(0,25,70,0.18)'; ctx.fill();
+  ctx.beginPath(); trace(pr, 0.7); traceBack(pr, 0.25); ctx.closePath(); ctx.fillStyle = 'rgba(255,255,255,0.16)'; ctx.fill();
+  ctx.beginPath(); trace(pr, 0.62); traceBack(pr, 0.5); ctx.closePath(); ctx.fillStyle = 'rgba(255,255,255,0.12)'; ctx.fill();
+  ctx.beginPath(); trace(pr, -0.6); traceBack(pr, -1); ctx.closePath(); ctx.fillStyle = 'rgba(0,25,70,0.2)'; ctx.fill();
   // خطوط الجريان
-  ctx.lineWidth = 1; ctx.strokeStyle = 'rgba(255,255,255,0.13)';
+  ctx.lineWidth = 1; ctx.strokeStyle = 'rgba(255,255,255,0.12)';
   for (const k of [0.66, 0.33, -0.33, -0.66]) { ctx.beginPath(); trace(pr, k); ctx.stroke(); }
   // المحور (منه نقيس ارتفاع الماء)
-  ctx.setLineDash([12, 4, 2, 4]); ctx.strokeStyle = 'rgba(255,255,255,0.4)';
+  ctx.setLineDash([12, 4, 2, 4]); ctx.strokeStyle = 'rgba(255,255,255,0.35)';
   ctx.beginPath(); trace(pr, 0); ctx.stroke(); ctx.setLineDash([]);
   if (cur.cav) {
     ctx.save();
     ctx.beginPath(); trace(pr, 1); traceBack(pr, -1); ctx.closePath(); ctx.clip();
     const x0 = X(uc - LT / 2 - 0.01), x1 = X(uc + LT / 2 + 0.07);
-    const g = ctx.createLinearGradient(x0, 0, x1, 0);
-    g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(0.2, 'rgba(255,255,255,0.45)');
-    g.addColorStop(0.65, 'rgba(255,255,255,0.18)'); g.addColorStop(1, 'rgba(255,255,255,0)');
-    ctx.fillStyle = g; ctx.fillRect(x1, axisY - RMAX * s, x0 - x1, 2 * RMAX * s);
+    const gg = ctx.createLinearGradient(x0, 0, x1, 0);
+    gg.addColorStop(0, 'rgba(255,255,255,0)'); gg.addColorStop(0.2, 'rgba(255,255,255,0.45)');
+    gg.addColorStop(0.65, 'rgba(255,255,255,0.18)'); gg.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.fillStyle = gg; ctx.fillRect(x1, axisY - RMAX * s, x0 - x1, 2 * RMAX * s);
     ctx.restore();
   }
+}
+
+// سهم أبيض على المحور، طوله ∝ السرعة (يشير لليسار مع الجريان)
+function speedArrow(xc, len, th) {
+  const x0 = xc + len / 2, x1 = xc - len / 2, hl = Math.min(len * 0.5, th * 2.4 + 4), hw = th * 1.5 + 2;
+  ctx.beginPath();
+  ctx.moveTo(x0, axisY - th / 2); ctx.lineTo(x1 + hl, axisY - th / 2); ctx.lineTo(x1 + hl, axisY - hw);
+  ctx.lineTo(x1, axisY); ctx.lineTo(x1 + hl, axisY + hw); ctx.lineTo(x1 + hl, axisY + th / 2); ctx.lineTo(x0, axisY + th / 2);
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(255,255,255,0.82)'; ctx.fill();
+  ctx.lineWidth = 1; ctx.strokeStyle = 'rgba(0,40,90,0.35)'; ctx.stroke();
+}
+function drawSpeedArrows() {
+  if (state.v1 <= 0) return;
+  for (const off of [TUBE_OFFS[0], 0, TUBE_OFFS[4]]) {
+    const r = radiusAtOffset(off), v = flowSpeed(r);
+    speedArrow(X(uc + off), clamp(v * 0.08 * s, 8, 0.22 * s), clamp(r * s * 0.2, 2.5, 6));
+  }
+}
+
+function drawParticles() {
+  ctx.lineCap = 'round'; ctx.lineWidth = 1.8;
+  for (const p of parts) {
+    const r = rAtU(p.u), v = flowSpeed(r);
+    const x = X(p.u), y = axisY - p.e * r * s;
+    const sp = sprites[Math.round(clamp(v / 3, 0, 1) * 7)];      // أبيض = بطيء ، برتقالي = سريع
+    const ut = p.u - Math.min(v * TIME_SCALE * 0.09, 0.07);         // ذيل طوله ∝ السرعة
+    const xt = X(ut), yt = axisY - p.e * rAtU(ut) * s;
+    if (xt - x > 1.5) { ctx.strokeStyle = sp.trail; ctx.beginPath(); ctx.moveTo(xt, yt); ctx.lineTo(x, y); ctx.stroke(); }
+    ctx.drawImage(sp.img, x - 4.5, y - 4.5, 9, 9);
+  }
+}
+
+function bubble(x, y, rad) {
+  ctx.beginPath(); ctx.arc(x, y, rad, 0, 6.2832);
+  ctx.fillStyle = 'rgba(255,255,255,0.3)'; ctx.fill();
+  ctx.lineWidth = 1.2; ctx.strokeStyle = 'rgba(255,255,255,0.95)'; ctx.stroke();
 }
 function drawVapor() {
   ctx.fillStyle = 'rgba(255,255,255,0.85)';
@@ -564,32 +718,27 @@ function drawVapor() {
   }
 }
 
-function drawParticles() {
-  ctx.lineCap = 'round'; ctx.lineWidth = 2;
-  for (const p of parts) {
-    const r = rAtU(p.u), v = flowSpeed(r);
-    const x = X(p.u), y = axisY - p.e * r * s;
-    const ut = p.u - Math.min(v * TIME_SCALE * 0.10, 0.06);   // ذيل طوله ∝ السرعة
-    let xt = X(ut); const yt = axisY - p.e * rAtU(ut) * s;
-    if (xt - x < 0.8) xt = x + 0.8;
-    const t = clamp(v / 3, 0, 1);                                // أبيض = بطيء ، برتقالي = سريع
-    ctx.strokeStyle = `rgba(255,${Math.round(255 - 70 * t)},${Math.round(255 - 200 * t)},0.88)`;
-    ctx.beginPath(); ctx.moveTo(xt, yt); ctx.lineTo(x, y); ctx.stroke();
-  }
-}
-
-function bubble(x, y, rad) {
-  ctx.beginPath(); ctx.arc(x, y, rad, 0, 6.2832);
-  ctx.fillStyle = 'rgba(255,255,255,0.3)'; ctx.fill();
-  ctx.lineWidth = 1.2; ctx.strokeStyle = 'rgba(255,255,255,0.95)'; ctx.stroke();
-}
-
 function drawWalls(pr) {
   ctx.lineJoin = 'round'; ctx.lineWidth = wallPx; ctx.strokeStyle = C.wall;
   ctx.beginPath(); trace(pr, 1, wallPx / 2); ctx.stroke();
   ctx.beginPath(); trace(pr, -1, wallPx / 2); ctx.stroke();
-  ctx.lineWidth = 1; ctx.strokeStyle = 'rgba(255,255,255,0.45)';
+  ctx.lineWidth = 1; ctx.strokeStyle = 'rgba(255,255,255,0.5)';
   ctx.beginPath(); trace(pr, 1, wallPx - 1); ctx.stroke();
+  ctx.strokeStyle = 'rgba(255,255,255,0.18)';
+  ctx.beginPath(); trace(pr, -1, 1); ctx.stroke();
+}
+// شفّتان معدنيتان عند طرفي قطعة الفنتوري
+function drawFlanges() {
+  const w = Math.max(6, 0.016 * s), h = R1 * s + wallPx + Math.max(4, 0.01 * s);
+  for (const sg of [-1, 1]) {
+    const x = X(uc + sg * (LT / 2 + LC + 0.012));
+    const g = ctx.createLinearGradient(0, axisY - h, 0, axisY + h);
+    g.addColorStop(0, C.metal2); g.addColorStop(0.25, C.metal1); g.addColorStop(0.6, C.metal2); g.addColorStop(1, C.metal2);
+    ctx.fillStyle = g; rr(x - w / 2, axisY - h, w, 2 * h, 2.5); ctx.fill();
+    ctx.lineWidth = 1; ctx.strokeStyle = 'rgba(0,0,0,0.25)'; ctx.stroke();
+    ctx.fillStyle = 'rgba(0,0,0,0.35)';
+    for (const yb of [axisY - h + 3.5, axisY + h - 3.5]) { ctx.beginPath(); ctx.arc(x, yb, 1.5, 0, 6.2832); ctx.fill(); }
+  }
 }
 
 function edgeFade() {
@@ -610,30 +759,58 @@ function drawTubes() {
     const x = X(uc + t.off), yIn = axisY - t.r * s, yOut = yIn - wallPx, off = cur.cav && i > 0;
     ctx.clearRect(x - hw, yOut - 0.5, tubeW, wallPx + 1);          // فتحة في الجدار
     ctx.globalAlpha = off ? 0.4 : 1;
-    ctx.fillStyle = C.glass; ctx.fillRect(x - hw, yTop, tubeW, yIn - yTop);
+    const gg = ctx.createLinearGradient(x - hw, 0, x + hw, 0);
+    gg.addColorStop(0, C.glass); gg.addColorStop(0.5, 'rgba(255,255,255,0.06)'); gg.addColorStop(1, C.glass);
+    ctx.fillStyle = gg; ctx.fillRect(x - hw, yTop, tubeW, yIn - yTop);
     const yL = axisY - lv[i] * s;
     if (yL < yIn - 0.3) {
       const g = ctx.createLinearGradient(x - hw, 0, x + hw, 0);
       g.addColorStop(0, C.water3); g.addColorStop(0.35, C.water1); g.addColorStop(1, C.water2);
-      ctx.fillStyle = g; ctx.fillRect(x - hw, yL, tubeW, yIn - yL + 1);
-      ctx.fillStyle = 'rgba(255,255,255,0.6)'; ctx.fillRect(x - hw, yL, tubeW, 1.5);
+      ctx.fillStyle = g;
+      // سطح مقعّر خفيف (هلال الماء)
+      ctx.beginPath(); ctx.moveTo(x - hw, yL - 1.5); ctx.quadraticCurveTo(x, yL + 2.5, x + hw, yL - 1.5);
+      ctx.lineTo(x + hw, yIn + 1); ctx.lineTo(x - hw, yIn + 1); ctx.closePath(); ctx.fill();
+      ctx.strokeStyle = 'rgba(255,255,255,0.75)'; ctx.lineWidth = 1.2;
+      ctx.beginPath(); ctx.moveTo(x - hw, yL - 1.5); ctx.quadraticCurveTo(x, yL + 2.5, x + hw, yL - 1.5); ctx.stroke();
     }
     ctx.strokeStyle = t.air && !off ? C.danger : C.glassEdge; ctx.lineWidth = 1.5;
     ctx.beginPath();
     ctx.moveTo(x - hw - 0.75, yOut); ctx.lineTo(x - hw - 0.75, yTop); ctx.lineTo(x - hw - 3.5, yTop - 3);
     ctx.moveTo(x + hw + 0.75, yOut); ctx.lineTo(x + hw + 0.75, yTop); ctx.lineTo(x + hw + 3.5, yTop - 3);
     ctx.stroke();
-    ctx.fillStyle = 'rgba(255,255,255,0.28)'; ctx.fillRect(x - hw + 1.5, yTop + 4, 1.5, Math.max(0, yIn - yTop - 8));
+    ctx.fillStyle = 'rgba(255,255,255,0.35)'; ctx.fillRect(x - hw + 1.5, yTop + 4, 1.5, Math.max(0, yIn - yTop - 8));
     ctx.globalAlpha = 1;
   });
   for (const b of bubbles) if (b.tube >= 0) bubble(X(uc + TUBE_OFFS[b.tube]) + Math.sin(b.wob) * 1.5, axisY - b.y * s, Math.min(b.rad, hw - 1.5));
 }
 
+// فرق الارتفاع بين الأنبوبين 1 و2 بسهم ورقم (أوضح للمبتدئ)
+function drawDeltaH() {
+  if (cur.cav || state.v1 <= 0 || cur.tubes[2].air) return;
+  const x1 = X(uc + TUBE_OFFS[0]), x2 = X(uc), y1 = axisY - lv[0] * s, y2 = axisY - lv[2] * s;
+  if (Math.abs(y2 - y1) < 16) return;
+  const xa = x2 - tubeW / 2 - 9, dir = y2 > y1 ? 1 : -1;
+  ctx.save();
+  ctx.setLineDash([4, 4]); ctx.strokeStyle = C.pressInk; ctx.globalAlpha = 0.7; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(x1 - tubeW / 2 - 1, y1); ctx.lineTo(xa - 4, y1); ctx.stroke();
+  ctx.setLineDash([]); ctx.globalAlpha = 1; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(xa, y1); ctx.lineTo(xa, y2 - dir * 2);
+  ctx.moveTo(xa - 4, y2 - dir * 6); ctx.lineTo(xa, y2 - dir * 1); ctx.lineTo(xa + 4, y2 - dir * 6); ctx.stroke();
+  ctx.restore();
+  ctx.textBaseline = 'middle';
+  halo((dir > 0 ? '↓ ' : '↑ ') + f(Math.abs(lv[0] - lv[2]) * 100, 1), xa - 6, (y1 + y2) / 2, 'right', C.pressInk, 'ltr', `800 ${W < 500 ? 11.5 : 13}px ${FONT}`);
+}
+
 function drawHandle() {
   const hx = X(uc), hy = axisY + state.d2 / 2 * s + wallPx / 2, big = dragging || hovering;
+  if (!interacted && !isOG) {             // نبضة تجذب الانتباه حتى أول لمسة
+    const k = (clock * 1.2) % 1;
+    ctx.beginPath(); ctx.ellipse(hx, hy, 18 + 16 * k, 8 + 10 * k, 0, 0, 6.2832);
+    ctx.strokeStyle = C.accent; ctx.globalAlpha = 0.6 * (1 - k); ctx.lineWidth = 2; ctx.stroke(); ctx.globalAlpha = 1;
+  }
   const w = big ? 40 : 34, h = big ? 14 : 12;
   ctx.save();
-  if (big) { ctx.shadowColor = C.accent; ctx.shadowBlur = 14; }
+  ctx.shadowColor = C.accent; ctx.shadowBlur = big ? 14 : 6;
   ctx.fillStyle = C.accent; rr(hx - w / 2, hy - h / 2, w, h, h / 2); ctx.fill();
   ctx.restore();
   ctx.strokeStyle = 'rgba(255,255,255,0.95)'; ctx.lineWidth = 1.6; ctx.lineCap = 'round';
@@ -664,7 +841,6 @@ function drawEnergy(pr) {
   ctx.textBaseline = 'alphabetic';
   halo('خط الطاقة الكلية (ثابت)', W - 6, yE - 7, 'right', C.kinInk, 'rtl', small);
   halo('خط الضغط', rulerW + 8, axisY - (cur.p1 / (RHO * G)) * s + 15, 'left', C.pressInk, 'rtl', small);
-  // v²/2g عند العنق
   const t2 = cur.tubes[2];
   if (!t2.air) {
     const x = X(uc) + tubeW / 2 + 9, y2 = axisY - lv[2] * s;
@@ -735,6 +911,24 @@ function drawLabels() {
   else pill(X(uc), y, [['v₂', 'ltr', sym, C.muted], ['=', 'ltr', sym, C.muted], [f(cur.v2, 2), 'ltr', num, C.kinInk], ['م/ث', 'rtl', unit, C.muted]], cur.tubes[2].air ? C.danger : C.kin);
 }
 
+// إطار متقطّع نابض حول الجزء الذي تشرحه الجولة
+function drawFocus() {
+  const yTop = axisY - H_TOP * s;
+  let R = null;
+  if (focus === 'pipe') R = [rulerW + 4, axisY - R1 * s - wallPx - 10, W - rulerW - 10, 2 * (R1 * s + wallPx + 10)];
+  else if (focus === 'tubes') { const xa = X(uc + TUBE_OFFS[4]) - 24, xb = X(uc + TUBE_OFFS[0]) + 18; R = [xa, yTop - 26, xb - xa, H_TOP * s - R1 * s + 22]; }
+  else if (focus === 'throat') { const hw = (LT / 2 + 0.08) * s, r = Math.max(R1, state.d2 / 2) * s + wallPx + 10; R = [X(uc) - hw, axisY - r, 2 * hw, 2 * r]; }
+  else if (focus === 'tube2') R = [X(uc) - 34, yTop - 26, 52, (H_TOP - state.d2 / 2) * s + 26];
+  else if (focus === 'handle') { const hy = axisY + state.d2 / 2 * s + wallPx / 2; R = [X(uc) - 34, hy - 18, 68, 36]; }
+  if (!R) return;
+  R[0] = Math.max(2, R[0]); R[2] = Math.min(W - 2 - R[0], R[2]);
+  ctx.save();
+  ctx.strokeStyle = C.kin; ctx.globalAlpha = 0.55 + 0.45 * Math.sin(clock * 4); ctx.lineWidth = 2.5;
+  ctx.setLineDash([7, 5]); ctx.lineDashOffset = -clock * 22;
+  rr(R[0], R[1], R[2], R[3], 12); ctx.stroke();
+  ctx.restore();
+}
+
 function draw() {
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   ctx.clearRect(0, 0, W, H);
@@ -742,21 +936,37 @@ function draw() {
   drawGrid();
   drawPipe(pr);
   drawParticles();
+  drawSpeedArrows();
   for (const b of bubbles) if (b.tube < 0) bubble(X(b.u), axisY - b.e * rAtU(b.u) * s + Math.sin(b.wob), b.rad);
   drawVapor();
   drawWalls(pr);
+  drawFlanges();
   edgeFade();
   drawTubes();
+  drawDeltaH();
   drawHandle();
   if (showEnergy && !cur.cav) drawEnergy(pr);
   drawRuler();
   drawReadings();
   drawLabels();
+  if (focus) drawFocus();
+}
+
+function runTween(now) {
+  const k = clamp((now - tween.t0) / tween.dur, 0, 1);
+  const e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+  for (const key of ['d2', 'v1', 'p1']) state[key] = tween.from[key] + (tween.to[key] - tween.from[key]) * e;
+  if (k >= 1) { Object.assign(state, tween.to); tween = null; }
+  syncSliders(); update();
+}
+function tweenTo(target) {
+  tween = { from: { d2: state.d2, v1: state.v1, p1: state.p1 }, to: { ...target }, t0: performance.now(), dur: reduceMotion ? 1 : 1100 };
 }
 
 let last = performance.now();
 function frame(now) {
   const dt = Math.min(0.05, (now - last) / 1000); last = now;
+  if (tween) runTween(now);
   if (visible && W) { step(dt); draw(); }
   requestAnimationFrame(frame);
 }
@@ -765,6 +975,8 @@ function frame(now) {
 const el = {
   d2: $('d2'), v1: $('v1'), p1: $('p1'), d2o: $('d2o'), v1o: $('v1o'), p1o: $('p1o'), status: $('status'),
   hint: $('hint'), tip: $('tip'), eline: $('eline'), toast: $('toast'),
+  tour: $('tour'), tourText: $('tourText'), tourStep: $('tourStep'), tourPrev: $('tourPrev'), tourNext: $('tourNext'),
+  tourSkip: $('tourSkip'), tourOpen: $('tourOpen'), dots: $('dots'),
 };
 const b = (x) => `<bdi>${x}</bdi>`;
 function setFill(inp) { inp.style.setProperty('--fill', ((inp.value - inp.min) / (inp.max - inp.min) * 100) + '%'); }
@@ -775,16 +987,21 @@ function syncSliders() {
 
 function statusHTML(sol, d) {
   const t1 = sol.tubes[0], t2 = sol.tubes[2];
-  if (sol.cav) return ['cav', `🫧 تكهّف! أخفض ضغط في المنتصف وصل إلى ضغط بخار الماء (${b(f(P_VAP / 1000, 2))} كيلوباسكال مطلق، أي ${b(f((P_VAP - P_ATM) / 1000, 2))} فوق الجوي)، فبدأ الماء يغلي من قلّة الضغط وتتكوّن فقاعات بخار تنهار بعد العنق. هنا لا يصح النموذج البسيط، لذلك أوقفنا الحساب. وسّع المنتصف أو خفّف السرعة لترجع.`];
-  if (sol.v1 === 0) return ['', '💤 الماء واقف: لا توجد سرعة، فالضغط متساوٍ في كل مكان — لاحظ أن كل الأنابيب على الارتفاع نفسه.'];
+  if (sol.cav) return ['cav', '🫧 تكهّف! الماء في المنتصف بدأ يغلي من قلّة الضغط',
+    `أخفض ضغط وصل إلى ضغط بخار الماء (${b(f(P_VAP / 1000, 2))} كيلوباسكال مطلق، أي ${b(f((P_VAP - P_ATM) / 1000, 2))} فوق الجوي)، فتتكوّن فقاعات بخار تنهار بعد العنق. هنا لا يصح النموذج البسيط، لذلك أوقفنا الحساب. وسّع المنتصف أو خفّف السرعة لترجع.`];
+  if (sol.v1 === 0) return ['', '💤 الماء واقف', 'لا توجد حركة، فالضغط متساوٍ في كل مكان — كل الأنابيب على الارتفاع نفسه.'];
+  const ratio = sol.v2 / sol.v1;
   if (t2.air) {
     const pTap = (t2.p - RHO * G * t2.r) / 1000;
-    return ['warn', `⚠️ الماء في المنتصف أسرع ${b(f(sol.v2 / sol.v1, 2))} مرة، فهبط الضغط عند فتحة الأنبوب 2 إلى ${b(f(pTap, 2))} كيلوباسكال — أقل من الضغط الجوي! لذلك يُسحب الهواء إلى داخل الأنبوب (هذه فكرة البخّاخ).`];
+    return ['warn', '⚠️ الضغط في المنتصف صار أقل من الضغط الجوي!',
+      `الماء هناك أسرع ${b(f(ratio, 2))} مرة، فهبط الضغط عند فتحة الأنبوب 2 إلى ${b(f(pTap, 2))} كيلوباسكال، لذلك يُسحب الهواء إلى داخل الأنبوب بدل أن يرتفع الماء (هذه فكرة البخّاخ).`];
   }
-  if (Math.abs(state.d2 - D1) < 0.0005) return ['', '➖ الأنبوب بالعرض نفسه في كل مكان: السرعة نفسها والضغط نفسه، فكل الأنابيب متساوية. جرّب أن تضيّق المنتصف!'];
-  const ratio = sol.v2 / sol.v1, dh = (t1.h - t2.h) * 100, dP = d.p1 - d.p2;
-  if (state.d2 < D1) return ['', `🔹 مساحة المنتصف أصغر ${b(f(ratio, 2))} مرة ⇐ الماء يجري أسرع ${b(f(ratio, 2))} مرة ⇐ الضغط أقل بـ ${b(f(dP, 2))} كيلوباسكال، فهبط الماء في الأنبوب 2 بمقدار ${b(f(dh, 1))} سم.`];
-  return ['', `🔸 المنتصف أوسع ⇐ الماء أبطأ ${b(f(1 / ratio, 2))} مرة ⇐ الضغط أعلى بـ ${b(f(-dP, 2))} كيلوباسكال، فارتفع الماء في الأنبوب 2 بمقدار ${b(f(-dh, 1))} سم.`];
+  if (Math.abs(state.d2 - D1) < 0.0005) return ['', '➖ الأنبوب بالعرض نفسه في كل مكان', 'السرعة نفسها والضغط نفسه، فكل الأنابيب متساوية. جرّب أن تضيّق المنتصف!'];
+  const dh = (t1.h - t2.h) * 100, dP = d.p1 - d.p2;
+  if (state.d2 < D1) return ['', `🐇 المنتصف أضيق ← الماء أسرع ${b('×' + f(ratio, 2))} ← 🔽 الضغط أقل`,
+    `مساحة المنتصف أصغر ${b(f(ratio, 2))} مرة، فيجري الماء أسرع بالنسبة نفسها، ويقلّ الضغط ${b(f(dP, 2))} كيلوباسكال، فينزل الماء في الأنبوب 2 بمقدار ${b(f(dh, 1))} سم.`];
+  return ['', '🐢 المنتصف أوسع ← الماء أبطأ ← 🔼 الضغط أعلى',
+    `الماء أبطأ ${b(f(1 / ratio, 2))} مرة، فيزيد الضغط ${b(f(-dP, 2))} كيلوباسكال، ويرتفع الماء في الأنبوب 2 بمقدار ${b(f(-dh, 1))} سم.`];
 }
 
 const CHALLENGES = [
@@ -802,39 +1019,39 @@ function toast(msg) {
 
 function update() {
   cur = solve();
-  const d = displayVals(cur), t1 = cur.tubes[0], t2 = cur.tubes[2];
+  const d = displayVals(cur), cav = cur.cav;
+  const set = (id, v) => { $(id).textContent = v; };
+  const bar = (id, x) => { $(id).style.width = (clamp(x, 0, 1) * 100) + '%'; };
   el.d2o.innerHTML = `${b(f(state.d2 * 100, 1))} سم`;
   el.v1o.innerHTML = `${b(f(state.v1, 2))} م/ث`;
   el.p1o.innerHTML = `${b(f(state.p1 / 1000, 1))} كيلوباسكال`;
-  const set = (id, v) => { $(id).textContent = v; };
-  set('o_d1', f(D1 * 100, 1)); set('o_a1', f(cur.A1 * 1e4, 1)); set('o_v1', f(cur.v1, 2)); set('o_p1', f(d.p1, 2));
-  set('o_d2', f(state.d2 * 100, 1)); set('o_a2', f(cur.A2 * 1e4, 1)); set('o_v2', f(cur.v2, 2)); set('o_p2', f(d.p2, 2));
-  $('o_p2n').textContent = d.p2 < 0 ? '(أقل من الجوي)' : '';
-  const hcell = (id, t) => {
-    const c = $(id);
-    if (t.air) { c.className = 'air'; c.textContent = 'لا ماء — يدخل هواء ↓'; }
-    else { c.className = ''; c.innerHTML = `${b(f(t.h * 100, 1))} <span class="u">سم</span>`; }
-  };
-  hcell('o_h1', t1); hcell('o_h2', t2);
-  ['sec2', 'eqB', 'eqC'].forEach((id) => $(id).classList.toggle('cav', cur.cav));
-  if (cur.cav) {   // لا نعرض أرقامًا مستحيلة
-    set('o_v2', '—'); set('o_p2', '—'); $('o_p2n').textContent = '';
-    const c = $('o_h2'); c.className = 'cavv'; c.textContent = 'تكهّف — توقّف الحساب';
-  }
+  // مقاييس المقارنة
+  const Sv = Math.max(cur.v1, cav ? 0 : cur.v2, 1e-9), Sp = Math.max(d.p1, cav ? 0 : d.p2, 0.01);
+  set('m_v1', f(cur.v1, 2)); bar('mb_v1', cur.v1 / Sv);
+  set('m_p1', f(d.p1, 2)); bar('mb_p1', d.p1 / Sp);
+  set('m_v2', cav ? '—' : f(cur.v2, 2)); bar('mb_v2', cav ? 0 : cur.v2 / Sv);
+  set('m_p2', cav ? '—' : f(d.p2, 2)); bar('mb_p2', cav ? 0 : d.p2 / Sp);
+  $('meter2').classList.toggle('cav', cav);
+  set('m_n2', cav ? 'تكهّف: توقّف الحساب' : cur.tubes[2].air ? 'أقل من الضغط الجوي — يدخل هواء' : d.p2 < 0 ? 'أقل من الضغط الجوي' : '');
+  const ratio = cur.v1 > 0 ? cur.v2 / cur.v1 : 1;
+  set('m_ratio', cav ? '' : cur.v1 === 0 ? '' : ratio > 1.005 ? `أسرع ×${f(ratio, 2)}` : ratio < 0.995 ? `أبطأ ×${f(1 / ratio, 2)}` : 'السرعة نفسها');
+  // معادلة برنولي
   set('e_p1', f(d.p1, 2)); set('e_k1', f(d.k1, 2)); set('e_p2', f(d.p2, 2)); set('e_k2', f(d.k2, 2));
   set('e_t1', f(d.E, 2)); set('e_t2', f(d.E, 2));
-  // أشرطة الطاقة
   const S = Math.max(d.E, d.k2, d.k1, 0.01), pc = (x) => (Math.max(0, x) / S * 100) + '%';
   const seg = (id, right, width) => { const e = $(id); e.style.right = pc(right); e.style.width = pc(width); };
   seg('b1p', 0, d.p1); seg('b1k', d.p1, d.k1);
   if (d.p2 >= 0) { seg('b2p', 0, d.p2); seg('b2k', d.p2, d.k2); seg('b2n', 0, 0); }
   else { seg('b2p', 0, 0); seg('b2k', 0, d.k2); seg('b2n', d.E, d.k2 - d.E); }
+  ['eqB', 'eqC'].forEach((id) => $(id).classList.toggle('cav', cav));
   // الاستمرارية
-  const ar = cur.A1 / cur.A2;
-  $('c_line').innerHTML = `v₂ = ${f(cur.v1, 2)} × ${f(ar, 2)} = <span style="color:var(--kin-ink)">${f(cur.v2, 2)}</span> <span class="sym">م/ث</span>`;
+  $('c_area').innerHTML = `A₁ = ${f(cur.A1 * 1e4, 1)} <span class="sym">سم²</span> &nbsp;·&nbsp; A₂ = ${f(cur.A2 * 1e4, 1)} <span class="sym">سم²</span>`;
+  $('c_line').innerHTML = `v₂ = ${f(cur.v1, 2)} × ${f(cur.A1 / cur.A2, 2)} = <span class="k">${f(cur.v2, 2)}</span> <span class="sym">م/ث</span>`;
   $('c_q').innerHTML = `كمية الماء المارّة كل ثانية ${b('Q = A × v = ' + f(cur.Q * 1000, 2))} لتر/ث — هي نفسها عند 1 وعند 2، لكن الماء في المقطع الأصغر يجب أن يجري أسرع.`;
-  const [cls, html] = statusHTML(cur, d);
-  el.status.className = 'status' + (cls ? ' ' + cls : ''); el.status.innerHTML = html;
+  // الجملة البسيطة
+  const [cls, big, small] = statusHTML(cur, d);
+  el.status.className = 'status' + (cls ? ' ' + cls : '');
+  el.status.innerHTML = `<span class="big">${big}</span><span class="small">${small}</span>`;
   // التحديات
   for (const [id, test] of CHALLENGES) {
     if (!done.has(id) && test(cur)) { done.add(id); $(id).classList.add('done'); toast(`✓ أحسنت! (${done.size}/4)`); }
@@ -843,15 +1060,56 @@ function update() {
   placeHint();
 }
 
+// ---- الجولة التعليمية ----
+const S0 = { d2: 0.10, v1: 0.6, p1: 3000 }, S2 = { d2: 0.06, v1: 0.6, p1: 3000 }, S4 = { d2: 0.06, v1: 0.8, p1: 3000 };
+const TOUR = [
+  { t: '👋 أهلًا! هذا أنبوب يجري فيه الماء من اليمين إلى اليسار. كل نقطة مضيئة قطرة ماء، والسهم الأبيض طوله يدلّ على السرعة.', s: S0, focus: 'pipe' },
+  { t: '📏 الأنابيب الصغيرة فوقه تقيس الضغط: كلما زاد الضغط دفع الماء أعلى فيها. الأنبوب الآن بالعرض نفسه، فكل الأنابيب على الارتفاع نفسه.', s: S0, focus: 'tubes' },
+  { t: '🤏 لنضيّق المنتصف… راقب القطرات والسهم: في المكان الضيّق صار الماء أسرع! لأن الكمية نفسها يجب أن تمرّ كل ثانية.', s: S2, focus: 'throat' },
+  { t: '🔽 والآن انظر إلى الأنبوب 2: نزل الماء فيه! الماء السريع ضغطه أقل. هذه فكرة برنولي: سرعة أكبر ← ضغط أقل.', s: S2, focus: 'tube2' },
+  { t: '🚀 وإذا جعلنا الماء يجري أسرع من البداية، يكبر الفرق: ينزل الماء في الأنبوب 2 أكثر.', s: S4, focus: 'tube2' },
+  { t: '✋ دورك الآن! اسحب المقبض الأزرق تحت المنتصف بإصبعك لتضيّق الأنبوب أو توسّعه، أو استعمل الأشرطة تحت الرسم، ثم جرّب التحديات.', s: null, focus: 'handle', last: true },
+];
+let tourIdx = 0, tourOn = !isOG, interacted = isOG;
+TOUR.forEach(() => el.dots.appendChild(document.createElement('i')));
+function showStep(i) {
+  tourIdx = clamp(i, 0, TOUR.length - 1);
+  const st = TOUR[tourIdx];
+  el.tourText.textContent = st.t;
+  el.tourText.classList.remove('fade'); void el.tourText.offsetWidth; el.tourText.classList.add('fade');
+  el.tourStep.textContent = `${tourIdx + 1}/${TOUR.length}`;
+  [...el.dots.children].forEach((d, k) => { d.className = k === tourIdx ? 'on' : k < tourIdx ? 'done' : ''; });
+  el.tourPrev.disabled = tourIdx === 0;
+  el.tourNext.textContent = st.last ? 'ابدأ التجربة ✓' : 'التالي ←';
+  focus = st.focus;
+  if (st.s) tweenTo(st.s);
+  refreshHint();
+}
+function endTour(toDefaults) {
+  tourOn = false; focus = null;
+  el.tour.hidden = true; el.tourOpen.hidden = false;
+  if (toDefaults) tweenTo(DEFAULTS);
+  refreshHint();
+}
+el.tourNext.addEventListener('click', () => { if (TOUR[tourIdx].last) endTour(false); else showStep(tourIdx + 1); });
+el.tourPrev.addEventListener('click', () => showStep(tourIdx - 1));
+el.tourSkip.addEventListener('click', () => endTour(true));
+el.tourOpen.addEventListener('click', () => {
+  tourOn = true; el.tour.hidden = false; el.tourOpen.hidden = true;
+  showStep(0); el.tour.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+});
+
 // ---- التلميح والسحب بالإصبع ----
-let hintGone = isOG;
 function placeHint() {
-  if (hintGone || !W) return;
+  if (!W) return;
   el.hint.style.left = X(uc) + 'px';
   el.hint.style.top = (axisY + state.d2 / 2 * s + wallPx + 3) + 'px';
 }
-function dismissHint() { if (!hintGone) { hintGone = true; el.hint.classList.add('gone'); } }
-if (isOG) el.hint.style.display = 'none';
+function refreshHint() {
+  const show = !interacted && (!tourOn || TOUR[tourIdx].last);
+  el.hint.classList.toggle('gone', !show);
+}
+function dismissHint() { tween = null; if (!interacted) { interacted = true; refreshHint(); } }
 
 function setD2(dm) {
   state.d2 = clamp(Math.round(dm * 1000) / 1000, D2_MIN, D2_MAX);
@@ -926,11 +1184,11 @@ window.addEventListener('mouseup', () => { if (mouseDrag) { mouseDrag = false; e
 
 // ---- الأشرطة والأزرار ----
 el.d2.addEventListener('input', () => { dismissHint(); state.d2 = +el.d2.value / 100; setFill(el.d2); update(); });
-el.v1.addEventListener('input', () => { state.v1 = +el.v1.value; setFill(el.v1); update(); });
-el.p1.addEventListener('input', () => { state.p1 = Math.round(+el.p1.value * 1000); setFill(el.p1); update(); });
+el.v1.addEventListener('input', () => { tween = null; state.v1 = +el.v1.value; setFill(el.v1); update(); });
+el.p1.addEventListener('input', () => { tween = null; state.p1 = Math.round(+el.p1.value * 1000); setFill(el.p1); update(); });
 el.eline.checked = showEnergy;
 el.eline.addEventListener('change', () => { showEnergy = el.eline.checked; });
-$('reset').addEventListener('click', () => { Object.assign(state, DEFAULTS); syncSliders(); update(); });
+$('reset').addEventListener('click', () => tweenTo(DEFAULTS));
 
 // ---- الاختبار ----
 const QUIZ = [
@@ -966,9 +1224,11 @@ QUIZ.forEach((item, qi) => {
 // ---- التشغيل ----
 readColors();
 matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', readColors);
+if (tourOn) Object.assign(state, S0); else el.tour.hidden = true;
+syncSliders(); update(); layout();
 new ResizeObserver(layout).observe(stage);
 new IntersectionObserver((en) => { visible = en[0].isIntersecting; }).observe(stage);
-syncSliders(); update(); layout();
+if (tourOn) showStep(0);
 requestAnimationFrame(frame);
 })();
 </script>
