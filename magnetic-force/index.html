@@ -1,0 +1,1458 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>فعل الحقل المغناطيسي في التيار الكهربائي</title>
+<meta name="description" content="تجربة تفاعلية لطلاب المرحلة الثانوية: إطار يمر فيه تيار بين قطبي مغناطيس. أدره بإصبعك وشاهد القوة الكهرطيسية وعزم المزدوجة وقاعدة التدفق الأعظمي والمقياس الغلفاني والمحرك الكهربائي.">
+<meta name="theme-color" content="#0b6fd0">
+<meta property="og:type" content="website">
+<meta property="og:title" content="فعل الحقل المغناطيسي في التيار — جرّبه بإصبعك">
+<meta property="og:description" content="أغلق القاطعة وشاهد الإطار يدور حتى يصبح التدفق أعظميًا.">
+<meta property="og:image" content="https://hanna-alfarah.github.io/bernoulli/magnetic-force/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://hanna-alfarah.github.io/bernoulli/magnetic-force/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧲</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* نفس نظام تصميم صفحة برنولي: بطاقات، جولة، مقاييس. ألوان الموضوع: القطب الشمالي أحمر، الجنوبي أزرق، الإطار نحاسي */
+:root{
+  --bg:#eef2f8; --card:#ffffff; --ink:#111b2b; --muted:#5a6a80; --line:#dbe3ee; --soft:#f1f5fb; --chip:#e5edf9;
+  --accent:#0b6fd0; --accent-ink:#ffffff;
+  --north:#d9412f; --south:#2c63d6; --copper:#c27632; --copper-hi:#f6c08c; --steel:#6b7a8c;
+  --force:#e07800; --force-ink:#a85600; --arm:#c0267a; --arm-ink:#a01d64;
+  --flux:#119a4f; --flux-ink:#0b7a3d; --fluxneg:#7c3aed; --fieldline:rgba(60,85,120,.40); --current:#f5b400;
+  --danger:#d93636; --danger-soft:#fdecec; --danger-ink:#b42323; --ok:#14995a; --ok-soft:#e6f6ee; --ok-ink:#0d7a46;
+  --track:#d8e1ed; --stage:#f2f6fb; --stage-hi:#ffffff; --grid:rgba(20,60,110,.08);
+  --shadow:0 1px 2px rgba(16,32,60,.06), 0 10px 28px rgba(16,32,60,.07);
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0a1019; --card:#111926; --ink:#e6edf6; --muted:#97a6ba; --line:#22304a; --soft:#152035; --chip:#162d4b;
+    --accent:#4aa8ff; --accent-ink:#06121f;
+    --north:#f0624f; --south:#4f86f5; --copper:#e0934f; --copper-hi:#ffd2a6; --steel:#9aa8ba;
+    --force:#ffa13d; --force-ink:#ffb866; --arm:#ff6fb0; --arm-ink:#ff8fc2;
+    --flux:#3ccf8a; --flux-ink:#5fe0a2; --fluxneg:#b48cff; --fieldline:rgba(170,195,235,.34); --current:#ffd04a;
+    --danger:#ff6464; --danger-soft:#3a1717; --danger-ink:#ffa0a0; --ok:#3ccf8a; --ok-soft:#10301f; --ok-ink:#5fe0a2;
+    --track:#24344d; --stage:#0c1420; --stage-hi:#152238; --grid:rgba(160,200,255,.07);
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 28px rgba(0,0,0,.25);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0a1019; --card:#111926; --ink:#e6edf6; --muted:#97a6ba; --line:#22304a; --soft:#152035; --chip:#162d4b;
+  --accent:#4aa8ff; --accent-ink:#06121f;
+  --north:#f0624f; --south:#4f86f5; --copper:#e0934f; --copper-hi:#ffd2a6; --steel:#9aa8ba;
+  --force:#ffa13d; --force-ink:#ffb866; --arm:#ff6fb0; --arm-ink:#ff8fc2;
+  --flux:#3ccf8a; --flux-ink:#5fe0a2; --fluxneg:#b48cff; --fieldline:rgba(170,195,235,.34); --current:#ffd04a;
+  --danger:#ff6464; --danger-soft:#3a1717; --danger-ink:#ffa0a0; --ok:#3ccf8a; --ok-soft:#10301f; --ok-ink:#5fe0a2;
+  --track:#24344d; --stage:#0c1420; --stage-hi:#152238; --grid:rgba(160,200,255,.07);
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 28px rgba(0,0,0,.25);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font-family:"Cairo",system-ui,"Segoe UI",Tahoma,sans-serif;background:var(--bg);color:var(--ink);line-height:1.75;font-size:16px}
+bdi{unicode-bidi:isolate;direction:ltr}
+.wrap{max-width:1000px;margin:0 auto;padding:0 16px}
+.hero{padding:20px 0 4px;background:radial-gradient(700px 240px at 85% -40px, color-mix(in srgb, var(--south) 22%, transparent), transparent 70%)}
+.kicker{display:inline-block;font-size:13px;font-weight:700;color:var(--accent);background:var(--chip);padding:2px 12px;border-radius:999px}
+h1{font-size:clamp(25px,5.6vw,38px);line-height:1.4;margin:10px 0 6px;font-weight:800;text-wrap:balance}
+h1 .grad{background:linear-gradient(270deg,var(--north),var(--copper) 50%,var(--south));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lede{color:var(--muted);margin:0 0 8px;max-width:62ch}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px}
+.chips span{font-size:12.5px;font-weight:700;color:var(--muted);background:var(--card);border:1px solid var(--line);padding:1px 10px;border-radius:99px}
+h2{font-size:22px;margin:0 0 10px;font-weight:800;text-wrap:balance}
+h3{font-size:17px;margin:0 0 8px;font-weight:800;display:flex;align-items:center;gap:8px;text-wrap:balance}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}
+.lab{padding:12px;margin-top:10px}
+/* الجولة */
+.tour{margin:0 0 10px;padding:12px 14px;border-radius:14px;background:linear-gradient(135deg,var(--chip),var(--soft));border:1px solid var(--line)}
+.tour[hidden]{display:none}
+.tour-top{display:flex;align-items:center;gap:8px}
+.tour-top .lbl{font-weight:800;font-size:13.5px;color:var(--accent);white-space:nowrap}
+.dots{display:flex;gap:5px;flex:1;align-items:center}
+.dots i{width:7px;height:7px;border-radius:99px;background:var(--track);transition:all .3s}
+.dots i.on{background:var(--accent);width:20px}
+.dots i.done{background:color-mix(in srgb,var(--accent) 45%,var(--track))}
+.tstep{font-size:12.5px;font-weight:700;color:var(--muted)}
+.tour p{margin:6px 0 10px;font-weight:700;font-size:16px;line-height:1.8;min-height:5.4em}
+.tour p.fade{animation:fadeUp .4s ease-out}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.tour-btns{display:flex;gap:8px;justify-content:flex-end}
+.linkbtn{background:none;border:0;color:var(--muted);font:inherit;font-size:13px;font-weight:700;cursor:pointer;padding:2px 6px;border-radius:8px}
+.linkbtn:hover{color:var(--accent)}
+/* المسرح */
+.stage-head{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;color:var(--muted);padding:0 4px 6px;font-weight:600}
+.stage{position:relative;border-radius:14px;background:radial-gradient(120% 90% at 50% 0%,var(--stage-hi),var(--stage) 70%);overflow:hidden;border:1px solid var(--line)}
+canvas{display:block;width:100%;touch-action:pan-y;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
+#cv:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 50%,transparent);outline-offset:-3px;border-radius:14px}
+.stage.dragging canvas{cursor:grabbing}
+.viewbtn{position:absolute;left:8px;bottom:8px;font:inherit;font-size:13px;font-weight:800;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:99px;padding:3px 12px;cursor:pointer;box-shadow:var(--shadow)}
+.viewbtn:hover{border-color:var(--accent)}
+.viewbtn:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 40%,transparent)}
+.hint{position:absolute;left:0;top:0;display:flex;flex-direction:column;align-items:center;pointer-events:none;transform:translateX(-50%);animation:nudge 1.6s ease-in-out infinite;transition:opacity .3s}
+.hint .finger{font-size:24px;line-height:1;filter:drop-shadow(0 2px 3px rgba(0,0,0,.25))}
+.hint .hint-txt{background:var(--ink);color:var(--card);font-size:12.5px;font-weight:700;padding:1px 10px;border-radius:999px;white-space:nowrap;margin-top:2px}
+.hint.gone{opacity:0}
+@keyframes nudge{0%,100%{transform:translate(-50%,0)}50%{transform:translate(calc(-50% + 9px),0)}}
+.tip{position:absolute;left:0;top:0;transform:translate(-50%,-100%);background:var(--ink);color:var(--card);font-weight:800;font-size:14px;padding:3px 12px;border-radius:10px;pointer-events:none;opacity:0;transition:opacity .15s;white-space:nowrap}
+.tip.show{opacity:1}
+.legend2{display:flex;flex-wrap:wrap;justify-content:center;gap:2px 14px;font-size:12px;color:var(--muted);font-weight:600;margin-top:6px}
+.legend2 .ln{display:inline-block;width:16px;height:3px;border-radius:2px;vertical-align:middle;margin-inline-end:5px}
+.legend2 .sq{display:inline-block;width:10px;height:10px;border-radius:3px;vertical-align:-1px;margin-inline-end:5px;opacity:.8}
+/* الحالة والمقاييس */
+.status{margin:10px 0 2px;padding:10px 12px;border-radius:12px;background:var(--soft);min-height:4.4em;line-height:1.8;transition:background .3s,color .3s}
+.status .big{display:block;font-size:16.5px;font-weight:800}
+.status .small{display:block;font-size:14px;font-weight:600;opacity:.9}
+.status.warn{background:var(--danger-soft);color:var(--danger-ink)}
+.status.ok{background:var(--ok-soft);color:var(--ok-ink)}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.actions .btn{flex:1 1 140px;padding:8px 12px;font-size:15px}
+.segm{display:flex;gap:3px;background:var(--soft);border:1px solid var(--line);border-radius:13px;padding:3px;margin-top:10px}
+.segm button{flex:1;font:inherit;font-size:14px;font-weight:700;color:var(--muted);background:transparent;border:0;border-radius:10px;padding:6px 4px;cursor:pointer;line-height:1.45}
+.segm button[aria-checked="true"]{background:var(--card);color:var(--accent);box-shadow:0 1px 3px rgba(0,0,0,.14)}
+.segm button:focus-visible{outline:2px solid var(--accent)}
+.meters{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.meter{background:var(--soft);border-radius:14px;padding:10px 12px;border:1px solid var(--line);min-width:0}
+.mh{display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px;font-weight:800;font-size:14.5px;margin-bottom:2px}
+.mrow{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:0 6px;font-size:13px;font-weight:700;color:var(--muted);margin-top:6px}
+.mrow[hidden]{display:none}
+.mrow b{font-size:15px;font-variant-numeric:tabular-nums;color:var(--ink)}
+.mrow b.g{color:var(--arm-ink);font-size:16.5px} .mrow b.fx{color:var(--flux-ink);font-size:16.5px}
+.mbar{height:10px;border-radius:99px;background:var(--track);overflow:hidden;margin-top:2px;position:relative}
+.mbar i{display:block;height:100%;border-radius:99px;width:0;transition:width .15s ease-out}
+.mbar i.g{background:var(--arm)}
+.mbar.mid i{position:absolute;top:0;transition:none}
+.mbar.mid i.fx{background:var(--flux)} .mbar.mid i.neg{background:var(--fluxneg)}
+.mbar.mid::after{content:"";position:absolute;left:50%;top:-2px;bottom:-2px;width:2px;margin-left:-1px;background:var(--muted);opacity:.5}
+.chartbox{margin-top:10px;background:var(--soft);border:1px solid var(--line);border-radius:14px;padding:8px 8px 4px}
+.chart{height:150px}
+.chart-cap{display:flex;flex-wrap:wrap;justify-content:center;gap:2px 14px;font-size:12px;color:var(--muted);font-weight:700;padding:2px 0 2px}
+.chart-cap .ln{display:inline-block;width:16px;height:3px;border-radius:2px;vertical-align:middle;margin-inline-end:5px}
+.chart-cap .dash{background:repeating-linear-gradient(90deg,var(--accent) 0 4px,transparent 4px 7px)!important}
+/* التحكم */
+.controls{display:grid;grid-template-columns:1fr;gap:2px 22px;margin-top:8px}
+@media (min-width:760px){.controls{grid-template-columns:1fr 1fr}}
+.ctl{padding:4px 2px}
+.ctl-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.ctl label{font-weight:700;font-size:15px}
+.ctl output{font-weight:800;color:var(--accent);font-size:15px;white-space:nowrap}
+.ends{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:-4px}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:36px;background:transparent;margin:0;cursor:pointer;--fill:50%}
+input[type=range]:focus{outline:none}
+input[type=range]::-webkit-slider-runnable-track{height:8px;border-radius:99px;background:linear-gradient(to left,var(--accent) var(--fill),var(--track) var(--fill))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:var(--card);border:3px solid var(--accent);margin-top:-9px;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 5px color-mix(in srgb,var(--accent) 30%,transparent)}
+input[type=range]::-moz-range-track{height:8px;border-radius:99px;background:var(--track)}
+input[type=range]::-moz-range-progress{height:8px;border-radius:99px;background:var(--accent)}
+input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--card);border:3px solid var(--accent)}
+details.adv{grid-column:1/-1;border-top:1px dashed var(--line);margin-top:4px;padding-top:6px}
+details.adv summary{cursor:pointer;font-weight:700;font-size:14.5px;color:var(--muted);padding:4px 2px;list-style:none}
+details.adv summary::-webkit-details-marker{display:none}
+details.adv summary::after{content:" ▾"}
+details.adv[open] summary::after{content:" ▴"}
+.adv-body{display:grid;grid-template-columns:1fr;gap:6px 22px;align-items:center}
+@media (min-width:760px){.adv-body{grid-template-columns:1fr 1fr}}
+.row-btns{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin-top:8px;grid-column:1/-1}
+.switch{display:inline-flex;align-items:center;gap:10px;font-weight:700;font-size:14.5px;cursor:pointer;user-select:none;padding:4px 2px}
+.switch input{position:absolute;opacity:0;pointer-events:none}
+.switch .sw{width:44px;height:26px;border-radius:99px;background:var(--track);position:relative;transition:background .2s;flex:none}
+.switch .sw::after{content:"";position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:var(--card);box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .2s}
+.switch input:checked + .sw{background:var(--accent)}
+.switch input:checked + .sw::after{transform:translateX(-18px)}
+.switch input:focus-visible + .sw{outline:3px solid color-mix(in srgb,var(--accent) 40%,transparent)}
+.btn{font:inherit;font-weight:700;font-size:14.5px;border:1px solid var(--line);background:var(--soft);color:var(--ink);border-radius:12px;padding:6px 14px;cursor:pointer;transition:transform .1s,border-color .2s}
+.btn:hover{border-color:var(--accent)}
+.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.45;cursor:default}
+.btn:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 40%,transparent)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.live{background:var(--current);border-color:var(--current);color:#1b1300}
+.btn[hidden]{display:none}
+/* الأقسام */
+.sec-title{margin:22px 4px 10px}
+.results{display:grid;grid-template-columns:1fr;gap:10px}
+@media (min-width:860px){.results{grid-template-columns:1fr 1fr}}
+.eqcard{padding:12px 14px}
+.eqcard p{margin:6px 0}
+.eq{font-size:clamp(14.5px,4vw,18px);text-align:center;font-weight:700;background:var(--soft);border-radius:12px;padding:8px 6px;line-height:1.9;font-variant-numeric:tabular-nums;overflow-x:auto}
+.eq .sym{color:var(--muted);font-weight:600}
+.eq .g{color:var(--arm-ink)} .eq .fx{color:var(--flux-ink)} .eq .ff{color:var(--force-ink)}
+.eq .tot{border-top:1px solid var(--line);margin-top:2px;padding-top:2px}
+.note{font-size:13px;color:var(--muted);margin:8px 0 0}
+.block{padding:16px;margin-top:14px}
+.ch{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.ch li{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:12px;background:var(--soft);transition:background .3s}
+.ch li small{display:block;color:var(--muted);font-weight:600;font-size:13px}
+.tick{flex:none;width:24px;height:24px;border-radius:50%;border:2px solid var(--line);margin-top:2px;display:grid;place-items:center;font-size:14px;color:#fff;transition:all .3s}
+.ch li.done{background:var(--ok-soft)}
+.ch li.done .tick{background:var(--ok);border-color:var(--ok);transform:scale(1.1)}
+.ch li.done .tick::after{content:"✓";font-weight:800}
+.count{font-size:14px;font-weight:700;color:var(--muted);background:var(--soft);padding:0 10px;border-radius:99px;margin-inline-start:6px}
+.explain{display:grid;grid-template-columns:1fr;gap:12px;margin-top:14px}
+@media (min-width:760px){.explain{grid-template-columns:1fr 1fr}.explain .full{grid-column:1/-1}}
+.explain .card{padding:16px;min-width:0}
+.explain p{margin:6px 0}
+.simple{background:linear-gradient(135deg,var(--card),var(--chip))}
+ol.steps{margin:4px 0 0;padding-inline-start:22px}
+ol.steps li{margin:8px 0;padding-inline-start:4px}
+ol.steps li::marker{font-weight:800;color:var(--accent)}
+.takeaway{font-size:18px;font-weight:800;text-align:center;background:var(--card);border:1px dashed var(--accent);border-radius:12px;padding:8px;margin-top:10px!important}
+.num{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:10px;background:var(--chip);color:var(--accent);font-weight:800;flex:none}
+.formula{direction:ltr;text-align:center;font-size:clamp(18px,4.8vw,23px);font-weight:800;background:var(--soft);border-radius:12px;padding:8px;margin:10px 0;overflow-x:auto}
+.formula.small{font-size:clamp(15px,4vw,18px);font-weight:700;line-height:2}
+.symbols{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;font-size:14.5px;margin:6px 0}
+.symbols b{direction:ltr;text-align:center}
+ul.life{margin:6px 0;padding-inline-start:20px}
+ul.life li{margin:6px 0}
+.rule{margin:10px 0 0;padding:10px 12px;border-radius:12px;background:var(--soft);font-weight:700;border-inline-start:4px solid var(--flux)}
+.rlab{margin:10px 0 4px;display:grid;gap:4px}
+.rstage .rb{position:absolute;top:8px;left:8px;font-size:12px;font-weight:800;color:var(--muted);background:var(--card);border:1px solid var(--line);border-radius:99px;padding:0 10px;pointer-events:none}
+.quiz{display:grid;gap:12px}
+.q{padding:12px;border-radius:12px;background:var(--soft)}
+.q p{margin:0 0 8px;font-weight:700}
+.opts{display:grid;gap:6px}
+.opt{font:inherit;text-align:start;font-weight:600;font-size:15px;padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.opt:hover{border-color:var(--accent)}
+.opt.right{background:var(--ok-soft);border-color:var(--ok)}
+.opt.wrong{background:var(--danger-soft);border-color:var(--danger)}
+.why{margin:8px 0 0;font-size:14px;font-weight:600;display:none}
+.q.answered .why{display:block}
+.toast{position:fixed;bottom:18px;left:50%;transform:translate(-50%,30px);background:var(--ok);color:#fff;font-weight:800;padding:8px 18px;border-radius:99px;opacity:0;transition:all .3s;pointer-events:none;z-index:9;box-shadow:var(--shadow);white-space:nowrap}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+footer{color:var(--muted);font-size:13px;text-align:center;padding:22px 0 30px}
+footer a{color:var(--accent)}
+@media (max-width:420px){.hero{padding-top:14px}.chips{display:none}.lede{font-size:15px}.lab{padding:9px}.eqcard{padding:10px}.meter{padding:9px 10px}.tour{padding:10px 12px}.tour p{font-size:15.5px}.segm button{font-size:13px}}
+@media (prefers-reduced-motion: reduce){.hint{animation:none}.tour p.fade{animation:none}}
+/* وضع صورة المشاركة (og.png) */
+.og body{width:1200px;height:630px;overflow:hidden}
+.og .wrap{max-width:1200px;padding:0 40px}
+.og main>:not(.lab),.og .lab>:not(.stage),.og .hint,.og .viewbtn,.og footer,.og .lede,.og .chips,.og .kicker{display:none!important}
+.og .hero{padding-top:20px}
+.og h1{font-size:40px;margin:0}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <span class="kicker">🧲 تجربة فيزياء تفاعلية · المرحلة الثانوية</span>
+    <h1>فعل الحقل المغناطيسي في التيار الكهربائي<br> <span class="grad">تيار + حقل ← قوة ← دوران</span></h1>
+    <p class="lede">لماذا يدور إطار يمر فيه تيار بين قطبي مغناطيس؟ وأين يتوقف؟ وكيف يصبح محركًا كهربائيًا لا يتوقف؟ أدره بإصبعك وشاهد بنفسك.</p>
+    <div class="chips"><span>⏱️ 10 دقائق</span><span>🎯 5 تحدّيات</span><span>🧠 7 أسئلة</span></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="card lab" aria-label="المختبر">
+    <div class="tour" id="tour">
+      <div class="tour-top">
+        <span class="lbl">🎓 جولة سريعة</span>
+        <span class="dots" id="dots" aria-hidden="true"></span>
+        <span class="tstep" id="tourStep"></span>
+        <button class="linkbtn" id="tourSkip" type="button">تخطَّ ✕</button>
+      </div>
+      <p id="tourText" aria-live="polite"></p>
+      <div class="tour-btns">
+        <button class="btn" id="tourPrev" type="button">→ السابق</button>
+        <button class="btn primary" id="tourNext" type="button">التالي ←</button>
+      </div>
+    </div>
+
+    <div class="stage-head"><span>🧲 الحقل من <bdi>N</bdi> إلى <bdi>S</bdi></span><span>🐢 الحركة أبطأ 10 مرات</span></div>
+    <div class="stage" id="stage">
+      <canvas id="cv" tabindex="0" role="img" aria-label="إطار مستطيل نحاسي معلّق بين قطبي مغناطيس على شكل حرف U، تمر بينهما خطوط الحقل المغناطيسي. يمكن تدويره بالإصبع أو بالأسهم."></canvas>
+      <button class="viewbtn" id="viewBtn" type="button">⬇️ انظر من فوق</button>
+      <div class="hint gone" id="hint" aria-hidden="true"><span class="finger">👆</span><span class="hint-txt">أدر الإطار بإصبعك ↔</span></div>
+      <div class="tip" id="tip" aria-hidden="true"></div>
+    </div>
+    <div class="legend2">
+      <span><i class="ln" style="background:var(--fieldline)"></i>خط حقل</span>
+      <span><i class="ln" style="background:var(--flux)"></i>خط يجتاز الإطار</span>
+      <span><i class="sq" style="background:var(--north)"></i>الوجه الشمالي (يخرج منه <bdi>n</bdi>)</span>
+      <span><i class="sq" style="background:var(--south)"></i>الوجه الجنوبي</span>
+      <span><i class="ln" style="background:var(--force)"></i>القوة <bdi>F</bdi></span>
+      <span><i class="ln" style="background:var(--arm)"></i>الذراع <bdi>d′</bdi></span>
+    </div>
+
+    <div class="status" id="status" aria-live="polite"></div>
+
+    <div class="actions">
+      <button class="btn primary" id="kBtn" type="button">⏻ أغلق القاطعة k</button>
+      <button class="btn" id="revBtn" type="button">⇄ اعكس جهة التيار</button>
+    </div>
+    <div class="segm" id="modeSeg" role="radiogroup" aria-label="طريقة تركيب الإطار">
+      <button type="button" role="radio" data-v="free">سلك عديم الفتل</button>
+      <button type="button" role="radio" data-v="torsion">سلك فتل</button>
+      <button type="button" role="radio" data-v="motor">محرك بمبدّل</button>
+    </div>
+
+    <div class="meters" aria-label="العزم والتدفق">
+      <div class="meter">
+        <div class="mh">🔄 عزم المزدوجة <bdi>Γ</bdi></div>
+        <div class="mrow"><span>الآن</span><b class="g"><bdi id="mG"></bdi></b></div>
+        <div class="mbar"><i class="g" id="bG"></i></div>
+        <div class="mrow"><span>الذراع <bdi>d′</bdi></span><b><bdi id="mD"></bdi></b></div>
+        <div class="mrow"><span>القوة على كل ضلع <bdi>F</bdi></span><b><bdi id="mF"></bdi></b></div>
+        <div class="mrow" id="mXrow" hidden><span id="mXl"></span><b><bdi id="mX"></bdi></b></div>
+      </div>
+      <div class="meter">
+        <div class="mh">🧲 التدفق <bdi>Φ</bdi></div>
+        <div class="mrow"><span>الآن</span><b class="fx"><bdi id="mP"></bdi></b></div>
+        <div class="mbar mid" dir="ltr"><i class="fx" id="bP"></i></div>
+        <div class="mrow"><span>الزاوية <bdi>α</bdi></span><b><bdi id="mA"></bdi></b></div>
+        <div class="mrow"><span>خطوط تجتاز الإطار</span><b id="mL"></b></div>
+      </div>
+    </div>
+    <div class="chartbox">
+      <canvas class="chart" id="gc" role="img" aria-label="منحنيا عزم المزدوجة والتدفق بدلالة الزاوية α، مع نقطة تتحرك مع الإطار"></canvas>
+      <div class="chart-cap"><span><i class="ln" style="background:var(--arm)"></i>العزم <bdi>Γ = Γmax·sin α</bdi></span><span><i class="ln" style="background:var(--flux)"></i>التدفق <bdi>Φ = Φmax·cos α</bdi></span></div>
+    </div>
+
+    <div class="controls">
+      <div class="ctl">
+        <div class="ctl-top"><label for="Isl">شدة التيار <bdi>I</bdi></label><output id="Io" for="Isl"></output></div>
+        <input type="range" id="Isl" min="0" max="1" step="0.01" value="0.5">
+        <div class="ends"><span>0</span><span><bdi>1 A</bdi></span></div>
+      </div>
+      <details class="adv">
+        <summary>⚙️ إعدادات إضافية (للمتقدّمين)</summary>
+        <div class="adv-body">
+          <div class="ctl">
+            <div class="ctl-top"><label for="Nsl">عدد اللفّات <bdi>N</bdi></label><output id="No" for="Nsl"></output></div>
+            <input type="range" id="Nsl" min="20" max="200" step="10" value="100">
+            <div class="ends"><span>20</span><span>200</span></div>
+          </div>
+          <div class="ctl">
+            <div class="ctl-top"><label for="Bsl">شدة الحقل <bdi>B</bdi></label><output id="Bo" for="Bsl"></output></div>
+            <input type="range" id="Bsl" min="0.02" max="0.3" step="0.01" value="0.1">
+            <div class="ends"><span><bdi>0.02 T</bdi></span><span><bdi>0.30 T</bdi></span></div>
+          </div>
+          <div class="ctl">
+            <div class="ctl-top"><label for="ksl">ثابت سلك الفتل <bdi>k</bdi></label><output id="ko" for="ksl"></output></div>
+            <input type="range" id="ksl" min="0.005" max="0.05" step="0.001" value="0.02">
+            <div class="ends"><span>سهل الفتل</span><span>قاسٍ</span></div>
+          </div>
+          <label class="switch"><input type="checkbox" id="showH"><span class="sw"></span>أظهر القوى على الضلعين الأفقيين</label>
+        </div>
+      </details>
+      <div class="row-btns">
+        <button class="btn" id="tourOpen" type="button" hidden>🎓 الجولة من البداية</button>
+        <button class="btn" id="reset" type="button">↺ إعادة الضبط</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="card block" id="challenges">
+    <h2>🎯 تحدّيات <span class="count" id="chCount">0/5</span></h2>
+    <ol class="ch">
+      <li id="c1"><span class="tick"></span><div><b>أمسك الإطار بإصبعك في الوضع الذي يكون فيه العزم أعظميًا (والقاطعة مغلقة).</b><small>تلميح: متى يكون ذراع المزدوجة d′ أطول ما يمكن؟</small></div></li>
+      <li id="c2"><span class="tick"></span><div><b>اكتشف التوازن القلق: اترك الإطار عند α قريبة من π (180°) والقاطعة مغلقة.</b><small>العزم هناك صفر… لكن هل يبقى الإطار في مكانه؟</small></div></li>
+      <li id="c3"><span class="tick"></span><div><b>اعكس جهة التيار والقاطعة مغلقة، وانتظر حتى يستقر الإطار من جديد.</b><small>كم دار الإطار؟ ولماذا؟</small></div></li>
+      <li id="c4"><span class="tick"></span><div><b>اختر «سلك فتل» واجعل الإطار ينحرف θ = 10° تمامًا.</b><small>تلميح: θ ≈ (N·S·B ÷ k)·I. جرّب تيارًا صغيرًا.</small></div></li>
+      <li id="c5"><span class="tick"></span><div><b>اختر «محرك بمبدّل» واجعله يكمل 5 دورات كاملة.</b><small>إذا لم يبدأ، فربما هو عند «النقطة الميتة»: أدره قليلًا بإصبعك.</small></div></li>
+    </ol>
+  </section>
+
+  <section class="explain" aria-label="الشرح">
+    <div class="card full simple">
+      <h3><span class="num">💡</span> الفكرة بكلمات بسيطة</h3>
+      <ol class="steps">
+        <li><b>تيار + حقل = قوة:</b> السلك الذي يمر فيه تيار بين قطبي مغناطيس يُدفع جانبًا، بقوة عمودية على السلك وعلى الحقل معًا.</li>
+        <li><b>قوتان متعاكستان = دوران:</b> التيار ينزل في ضلع من الإطار ويصعد في الضلع المقابل، فيُدفع أحدهما إلى الأمام والآخر إلى الخلف، فيدور الإطار، كما تدير مقود الدراجة بيديك.</li>
+        <li><b>يتوقف حيث يجتازه أكبر عدد من خطوط الحقل:</b> هناك تصبح القوتان على خط واحد، فلا تستطيعان تدويره بعد ذلك.</li>
+      </ol>
+      <p class="takeaway">✨ الخلاصة: تيار + حقل ← قوتان متعاكستان ← دوران حتى التدفق الأعظمي</p>
+    </div>
+
+    <div class="card full">
+      <h3><span class="num">1</span> من أين تأتي القوة؟ القوة الكهرطيسية على سلك</h3>
+      <p>كل سلك يمر فيه تيار وهو داخل حقل مغناطيسي تؤثر فيه قوة تُسمّى <b>القوة الكهرطيسية</b> (قوة لابلاس). جرّبها على سكّتين معدنيتين يتدحرج عليهما قضيب نحاسي، والحقل عمودي على الصفحة:</p>
+      <div class="rlab">
+        <div class="stage rstage" id="rstage">
+          <canvas id="rcv" role="img" aria-label="سكّتان أفقيتان داخل حقل مغناطيسي عمودي على الصفحة، وقضيب نحاسي عليهما يتحرك عندما يمر فيه تيار"></canvas>
+          <span class="rb" id="rBadge"></span>
+        </div>
+        <div class="actions">
+          <button class="btn primary" id="rOn" type="button">⏻ شغّل التيار</button>
+          <button class="btn" id="rRev" type="button">⇄ اعكس التيار</button>
+          <button class="btn" id="rFlip" type="button">🧲 اقلب المغناطيس</button>
+        </div>
+        <div class="ctl">
+          <div class="ctl-top"><label for="rI">شدة التيار في القضيب <bdi>I</bdi></label><output id="rIo" for="rI"></output></div>
+          <input type="range" id="rI" min="0.5" max="5" step="0.1" value="3">
+        </div>
+        <div class="eq" dir="ltr" id="rEq"></div>
+      </div>
+      <div class="formula">F = I · ℓ · B · sin θ</div>
+      <div class="symbols">
+        <b>F</b><span>شدة القوة الكهرطيسية (N)</span>
+        <b>I</b><span>شدة التيار (A)</span>
+        <b>ℓ</b><span>طول السلك داخل الحقل (m)</span>
+        <b>B</b><span>شدة الحقل المغناطيسي (T، تسلا)</span>
+        <b>θ</b><span>الزاوية بين السلك وخطوط الحقل</span>
+      </div>
+      <p><b>جهة القوة:</b> عمودية على السلك وعلى الحقل معًا. ابسط يدك اليمنى: الإبهام باتجاه التيار <bdi>I</bdi>، والأصابع باتجاه الحقل <bdi>B</bdi>، فتخرج القوة <bdi>F</bdi> من باطن الكف. (تعطي قاعدة فليمنغ لليد اليسرى، المستعملة في بعض الكتب، النتيجة نفسها.)</p>
+      <p>إذا كان السلك <b>موازيًا</b> لخطوط الحقل (<bdi>θ = 0</bdi>) فلا تؤثر فيه أي قوة.</p>
+    </div>
+
+    <div class="card">
+      <h3><span class="num">2</span> لماذا يدور الإطار؟</h3>
+      <p>للإطار أربعة أضلاع، وعلى كل ضلع قوة كهرطيسية:</p>
+      <ul class="life">
+        <li><b>الضلعان الشاقوليان</b> (طول كل منهما <bdi>L</bdi>) عموديان دائمًا على خطوط الحقل، فالقوة على كل منهما <bdi>F = N·I·L·B·sin(π/2) = N·I·L·B</bdi>. التيار فيهما متعاكس، فالقوتان متساويتان ومتعاكستان لكنهما <b>ليستا على حامل واحد</b>: إنهما <b>مزدوجة</b> تدوّر الإطار.</li>
+        <li><b>الضلعان الأفقيان:</b> القوتان عليهما شاقوليتان، أي موازيتان لمحور الدوران، فلا تدوّران الإطار، بل تشدّانه أو تضغطانه فقط. لتراهما فعّل «القوى على الضلعين الأفقيين» في الإعدادات الإضافية.</li>
+      </ul>
+      <p><bdi>N</bdi> عدد لفّات الإطار: كل لفّة تضيف قوتها، فتتضاعف القوة <bdi>N</bdi> مرة.</p>
+    </div>
+
+    <div class="card">
+      <h3><span class="num">3</span> عزم المزدوجة الكهرطيسية</h3>
+      <p>عزم المزدوجة = شدة إحدى القوتين × البعد بين حامليهما، وهو <b>ذراع المزدوجة</b> <bdi>d′</bdi>:</p>
+      <div class="formula small">Γ<sub>Δ</sub> = F · d′ &nbsp;,&nbsp; d′ = d · sin α<br>Γ<sub>Δ</sub> = N·I·L·B · d·sin α</div>
+      <div class="formula">Γ<sub>Δ</sub> = N · I · S · B · sin α</div>
+      <p><bdi>S = L·d</bdi> مساحة الإطار، و<bdi>α</bdi> الزاوية بين شعاع الحقل <bdi>B⃗</bdi> والناظم <bdi>n⃗</bdi> على سطح الإطار. (تكتب بعض الكتب العزم <bdi>τ</bdi> وتسمّيه عزم الازدواج.)</p>
+      <ul class="life">
+        <li><bdi>α = π/2</bdi>: الحقل موازٍ لمستوي الإطار ← <b>العزم أعظمي</b> والتدفق صفر.</li>
+        <li><bdi>α = 0</bdi>: العزم صفر ← <b>توازن مستقر</b>، والتدفق أعظمي.</li>
+        <li><bdi>α = π</bdi>: العزم صفر أيضًا، لكنه <b>توازن قلق</b>: أي دفعة صغيرة تقلب الإطار.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3><span class="num">4</span> قاعدة التدفق الأعظمي</h3>
+      <p>التدفق المغناطيسي يقيس مقدار ما يجتاز الإطار من خطوط الحقل:</p>
+      <div class="formula">Φ = N · B · S · cos α</div>
+      <p class="rule">إذا أثّر حقل مغناطيسي في دارة كهربائية مغلقة حرّة الحركة، تحرّكت بحيث يزداد التدفق المغناطيسي الذي يجتازها من وجهها الجنوبي، واستقرت في وضع يكون فيه التدفق أعظميًا.</p>
+      <p><b>وجها الإطار:</b> انظر إلى أحد وجهيه. إذا رأيت التيار يدور <b>مع</b> عقارب الساعة فهو الوجه الجنوبي، وإذا رأيته يدور <b>عكسها</b> فهو الوجه الشمالي، ومنه يخرج الناظم <bdi>n⃗</bdi>.</p>
+      <p><b>بكلمات بسيطة:</b> الإطار الذي يمر فيه تيار يصبح مغناطيسًا صغيرًا، فيدور حتى يواجه وجهُه الشمالي القطبَ الجنوبي للمغناطيس، كما تدور إبرة البوصلة.</p>
+    </div>
+
+    <div class="card">
+      <h3><span class="num">5</span> سلك الفتل والمقياس الغلفاني</h3>
+      <p>عندما نعلّق الإطار بسلك فتل ثابته <bdi>k</bdi>، يقاوم السلك الدوران بمزدوجة عزمها <bdi>Γ′ = −k·θ</bdi>. يدور الإطار زاوية <bdi>θ</bdi> ويتوازن عندما يتساوى العزمان:</p>
+      <div class="formula small">k·θ = N·I·S·B·cos θ</div>
+      <p>في الزوايا الصغيرة <bdi>cos θ ≈ 1</bdi>، فتتناسب الزاوية مع التيار:</p>
+      <div class="formula">θ = (N·S·B ÷ k) · I</div>
+      <p>هذا هو <b>المقياس الغلفاني</b>: مؤشر يدور بزاوية تتناسب مع شدة التيار، والمقدار <bdi>N·S·B ÷ k</bdi> هو <b>حساسيته</b>.</p>
+      <div class="chartbox">
+        <canvas class="chart" id="gcal" role="img" aria-label="منحني زاوية الانحراف بدلالة شدة التيار، في الحقل المنتظم وفي الحقل نصف القطري"></canvas>
+        <div class="chart-cap"><span><i class="ln" style="background:var(--force)"></i>حقل منتظم (تجربتنا)</span><span><i class="ln dash"></i>حقل نصف قطري (المقياس الحقيقي)</span></div>
+      </div>
+      <p class="note" id="calNote"></p>
+      <p>في الحقل المنتظم ينحني المنحني بعيدًا عن الخط المستقيم عند الزوايا الكبيرة. لذلك تُصنع أقطاب المقياس الحقيقي مقعّرة، وتوضع داخل الإطار أسطوانة من الحديد المطاوع، فتصبح خطوط الحقل نصف قطرية ويبقى مستوي الإطار موازيًا لها، وتصبح العلاقة خطية تمامًا.</p>
+    </div>
+
+    <div class="card">
+      <h3><span class="num">6</span> المحرك الكهربائي</h3>
+      <p>الإطار وحده لا يدور باستمرار، بل يتوقف عند التدفق الأعظمي. لكي يكمل الدوران نحتاج <b>مبدّلًا</b>: حلقة مقسومة نصفين تلامسها فرشاتان، فتعكس جهة التيار في الإطار كل نصف دورة، لحظة وصوله إلى <bdi>α = 0</bdi>.</p>
+      <p>بعد كل انعكاس يجد الإطار نفسه فجأة في وضع التدفق الأصغري (<bdi>α = π</bdi>)، فيدفعه العزم ليكمل نصف دورة أخرى، وهكذا يستمر.</p>
+      <p><b>النقطة الميتة:</b> إذا توقّف الإطار تمامًا عند <bdi>α = 0</bdi> فالعزم صفر ولا يبدأ الدوران وحده. لذلك تُصنع المحركات الحقيقية بعدة إطارات بزوايا مختلفة.</p>
+      <p>جرّبه: اختر «محرك بمبدّل» تحت الرسم.</p>
+    </div>
+
+    <div class="card">
+      <h3><span class="num">7</span> أين نرى هذا في الحياة؟</h3>
+      <ul class="life">
+        <li><b>المحركات الكهربائية:</b> في المروحة والغسالة والخلاط والسيارة الكهربائية، ملفات تدور في حقل مغناطيسي.</li>
+        <li><b>مكبّر الصوت:</b> ملف ملتصق بغشاء داخل حقل مغناطيس دائم. التيار المتغيّر يدفع الملف ذهابًا وإيابًا فيهتز الغشاء ويصدر الصوت.</li>
+        <li><b>أجهزة القياس ذات المؤشر:</b> في داخل الأميتر والفولتميتر التماثليين مقياس غلفاني.</li>
+        <li><b>القرص الصلب في الحاسوب:</b> ذراع القراءة يتحرك بملف في حقل مغناطيسي، بالقوة نفسها.</li>
+      </ul>
+    </div>
+
+    <div class="card full">
+      <h3><span class="num">8</span> حدود هذا النموذج (للأمانة العلمية)</h3>
+      <ul class="life">
+        <li>اعتبرنا الحقل بين القطبين منتظمًا (متساويًا في كل مكان). في المغناطيس الحقيقي يضعف الحقل قرب الحواف. وأهملنا الحقل الذي يولّده تيار الإطار نفسه.</li>
+        <li>عندما يدور الإطار في الحقل تتولّد فيه قوة محرّكة كهربائية متحرّضة تعاكس حركته (هذا موضوع درس التحريض الكهرطيسي). عوّضنا عنها وعن احتكاك الهواء بتخميد بسيط، لذلك يتأرجح الإطار قليلًا ثم يستقر. وفي المحرك الحقيقي هي التي تحدّ سرعة الدوران.</li>
+        <li>الأرقام حقيقية: إطار <bdi>5 cm × 4 cm</bdi> من 100 لفّة، كتلته نحو 40 غرامًا، في حقل <bdi>0.1 T</bdi>. لكن الحركة على الشاشة أبطأ 10 مرات لكي تراها. واعتبرنا كتلة الإطار ثابتة عندما تغيّر عدد اللفّات.</li>
+        <li>اهتزازات صغيرة جدًا (مثل أي جهاز حقيقي) هي التي تُخرج الإطار من التوازن القلق عند <bdi>α = π</bdi>.</li>
+      </ul>
+    </div>
+  </section>
+
+  <h2 class="sec-title">📐 للمتقدّمين: المعادلات بالأرقام</h2>
+  <section class="results" aria-label="المعادلات بالأرقام">
+    <div class="card eqcard">
+      <h3>العزم والتدفق الآن</h3>
+      <div class="eq" dir="ltr">
+        <div class="sym">Γ = N · I · S · B · sin α</div>
+        <div id="eG1"></div>
+        <div class="tot">Γ = <span class="g" id="eG2"></span> <span class="sym">N·m</span></div>
+      </div>
+      <div class="eq" dir="ltr" style="margin-top:8px">
+        <div class="sym">Φ = N · B · S · cos α</div>
+        <div id="eP1"></div>
+        <div class="tot">Φ = <span class="fx" id="eP2"></span> <span class="sym">Wb</span></div>
+      </div>
+      <p class="note"><bdi>S = L × d = 5 cm × 4 cm = 20 cm² = 2.0×10⁻³ m²</bdi></p>
+    </div>
+    <div class="card eqcard">
+      <h3>عمل القوى الكهرطيسية</h3>
+      <p>عندما يدور الإطار والتيار ثابت، تنجز القوى الكهرطيسية عملًا يساوي شدة التيار × تغيّر التدفق:</p>
+      <div class="eq" dir="ltr">
+        <div class="sym">W = I · ΔΦ = I · (Φ − Φ₀)</div>
+        <div id="eW1"></div>
+        <div class="tot">W = <span class="ff" id="eW2"></span> <span class="sym">J</span></div>
+      </div>
+      <p class="note" id="eWn"></p>
+    </div>
+  </section>
+
+  <section class="card block" aria-label="اختبر نفسك">
+    <h2>🧠 اختبر نفسك</h2>
+    <div class="quiz" id="quiz"></div>
+  </section>
+</main>
+
+<footer>
+  الحسابات: <bdi>F = N·I·L·B</bdi>، <bdi>Γ = N·I·S·B·sin α</bdi>، <bdi>Φ = N·B·S·cos α</bdi>، في حقل منتظم.
+  · <a href="../">تجربة أخرى: معادلة برنولي</a>
+  · <a href="https://github.com/Hanna-alfarah/bernoulli">الكود مفتوح على GitHub</a>
+</footer>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(() => {
+'use strict';
+const $ = (id) => document.getElementById(id);
+const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
+const PI = Math.PI, TAU = 2 * PI, DEG = 180 / PI;
+function f(x, d) { let t = (+x).toFixed(d); if (/^-0(\.0+)?$/.test(t)) t = t.slice(1); return t.replace('-', '−'); }
+const SUP = { '-': '⁻', 0: '⁰', 1: '¹', 2: '²', 3: '³', 4: '⁴', 5: '⁵', 6: '⁶', 7: '⁷', 8: '⁸', 9: '⁹' };
+// كتابة علمية: 0.0123 ← 1.23×10⁻²  (وتحت العتبة نكتب 0)
+function sci(x, d = 2, tiny = 1e-9) {
+  if (!isFinite(x) || Math.abs(x) < tiny) return '0';
+  const sg = x < 0 ? '−' : '';
+  let a = Math.abs(x), e = Math.floor(Math.log10(a)), m = a / Math.pow(10, e);
+  if (+m.toFixed(d) >= 10) { m /= 10; e += 1; }
+  return sg + m.toFixed(d) + '×10' + String(e).split('').map((c) => SUP[c]).join('');
+}
+const wrapPi = (a) => Math.atan2(Math.sin(a), Math.cos(a));
+const deg = (r, d = 0) => f(r * DEG, d) + '°';
+
+// ================= الفيزياء =================
+const LEN = 0.05, WID = 0.04, AREA = LEN * WID;   // L و d بالمتر، S = L·d
+const J = 1.13e-5;            // عزم عطالة إطار نحاسي نحو 40 غ حول محوره (kg·m²)
+const CDAMP = 1.6e-4;         // تخميد بسيط بدل التيار المتحرّض واحتكاك الهواء (N·m·s)
+const SLOW = 10;              // الحركة على الشاشة أبطأ 10 مرات
+const TSTATIC = 3e-4;         // احتكاك سكوني في محور المحرك (N·m): لهذا لا يبدأ المحرك وحده من النقطة الميتة
+const PSI0 = PI / 2;          // سلك الفتل غير مفتول حين يكون مستوي الإطار موازيًا للحقل (α = π/2)
+const DEF = { I: 0.5, N: 100, B: 0.1, k: 0.02 };
+// psi: الزاوية بين B والناظم "الهندسي" للإطار (المرتبط بجهة التيار الموجبة)
+const st = { psi: PSI0, omega: 0, dir: 1, closed: false, mode: 'free', hold: false, showH: false, ...DEF };
+const comm = (psi) => (Math.sin(psi) >= 0 ? 1 : -1);          // المبدّل: يقلب التيار حين يمر الإطار بـ α = 0
+function coilI(psi = st.psi) {                                  // التيار الجبري في الإطار
+  if (!st.closed) return 0;
+  return st.I * st.dir * (st.mode === 'motor' ? comm(psi) : 1);
+}
+const nSign = (psi = st.psi) => st.dir * (st.mode === 'motor' ? comm(psi) : 1);  // جهة الناظم تتبع جهة التيار
+function accel(psi, om) {
+  let tau = -st.N * coilI(psi) * AREA * st.B * Math.sin(psi) - CDAMP * om;
+  if (st.mode === 'torsion') tau -= st.k * (psi - PSI0);
+  return tau / J;
+}
+// توازن سلك الفتل: k·θ = a·cos θ  (a = N·I·S·B)
+function solveTheta(a, k) {
+  let t = Math.min(a / k, 1.2);
+  for (let i = 0; i < 30; i++) t -= (k * t - a * Math.cos(t)) / (k + a * Math.sin(t));
+  return t;
+}
+const HD = 2, HL = 2.5;                                   // نصف d ونصف L بالسنتيمتر (للرسم)
+const ROWS = [-3, -1.5, 0, 1.5, 3], COLS = [-2.4, -1.6, -0.8, 0, 0.8, 1.6, 2.4], GAP = 4.5;
+function derived() {
+  const Ic = coilI(), sN = nSign(), cosA = clamp(sN * Math.cos(st.psi), -1, 1);
+  const alpha = Math.acos(cosA), sinA = Math.sin(alpha), I = Math.abs(Ic);
+  const lim = HD * Math.abs(Math.cos(st.psi));
+  const cols = COLS.filter((z) => Math.abs(z) < lim - 1e-9).length;
+  return {
+    Ic, I, sN, alpha, sinA, cosA,
+    F: st.N * I * LEN * st.B, dp: WID * sinA,
+    G: st.N * I * AREA * st.B * sinA, Gmax: st.N * st.I * AREA * st.B,
+    Phi: st.N * st.B * AREA * cosA, PhiMax: st.N * st.B * AREA,
+    theta: PSI0 - st.psi, lines: cols * ROWS.filter((y) => Math.abs(y) < HL).length,
+  };
+}
+window.magnet = { st, derived };
+
+// ================= الرسم ثلاثي الأبعاد =================
+const cv = $('cv'), ctx = cv.getContext('2d'), stage = $('stage');
+const FONT = '"Cairo", "Segoe UI", Tahoma, sans-serif';
+const isOG = /[?&]og\b/.test(location.search);
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+if (isOG) document.documentElement.classList.add('og');
+const DIST = 80;
+const VIEWS = { persp: { yaw: -0.5, pitch: 0.36, zoom: 20, ox: 0, oy: 0, ty: 0, tz: 0 }, top: { yaw: 0, pitch: PI / 2, zoom: 20, ox: 0, oy: 0, ty: 0, tz: 0 } };
+let view = 'persp', cam = { ...VIEWS.persp }, camTween = null, psiTween = null;
+let W = 0, H = 0, dpr = 1, C = {}, visible = true, clock = 0, dotPhase = 0;
+let cyw = 1, syw = 0, cpt = 1, spt = 0, kz = 1;
+let dragging = false, focus = null, interacted = isOG, sch = null, still = 0, revs = 0;
+
+function readColors() {
+  const cs = getComputedStyle(document.documentElement), g = (n) => cs.getPropertyValue(n).trim();
+  C = {};
+  for (const n of ['north', 'south', 'copper', 'copper-hi', 'steel', 'force', 'force-ink', 'arm', 'arm-ink', 'flux', 'flux-ink', 'fluxneg',
+    'fieldline', 'current', 'ink', 'muted', 'card', 'line', 'stage', 'accent', 'grid', 'danger', 'ok', 'soft', 'track']) C[n.replace(/-(\w)/g, (m, c) => c.toUpperCase())] = g('--' + n);
+}
+function rgbOf(c) {
+  if (c[0] === '#') { const n = parseInt(c.slice(1), 16); return [n >> 16 & 255, n >> 8 & 255, n & 255]; }
+  const m = c.match(/[\d.]+/g); return m ? m.slice(0, 3).map(Number) : [128, 128, 128];
+}
+function shade(c, k) { const t = (v) => Math.round(k <= 1 ? v * k : v + (255 - v) * (k - 1)); const [r, g, b] = rgbOf(c); return `rgb(${t(r)},${t(g)},${t(b)})`; }
+function rgba(c, a) { const [r, g, b] = rgbOf(c); return `rgba(${r},${g},${b},${a})`; }
+
+function camTrig() { cyw = Math.cos(cam.yaw); syw = Math.sin(cam.yaw); cpt = Math.cos(cam.pitch); spt = Math.sin(cam.pitch); kz = cam.zoom; }
+// إسقاط منظوري: x يمين، y للأعلى، z نحو الناظر (بالسنتيمتر)
+function P(x, y, z) {
+  y -= cam.ty; z -= cam.tz;
+  const x1 = x * cyw + z * syw, z1 = -x * syw + z * cyw;
+  const yu = y * cpt - z1 * spt, zc = y * spt + z1 * cpt;
+  const k = kz * DIST / (DIST - zc);
+  return { x: W / 2 + cam.ox + x1 * k, y: H / 2 + cam.oy - yu * k, z: zc };
+}
+
+function layout() {
+  const w = Math.round(stage.clientWidth);
+  if (!w || w === W) return;
+  W = w;
+  H = isOG ? 470 : Math.round(clamp(W * 0.94, 310, Math.max(310, Math.min(520, window.innerHeight * 0.64))));
+  dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+  for (const v of Object.values(VIEWS)) fitView(v);
+  if (!camTween) Object.assign(cam, VIEWS[view]);
+  cv.style.height = H + 'px';
+  cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+}
+
+// نكبّر كل منظر حتى يملأ المسرح: نقيس حدود المشهد بتكبير 1 ثم نحسب التكبير والإزاحة
+const MAG = [-7.5, 7.5, -5.4, 3.6, -3, 3];
+const FIT = {
+  persp: [...[0, 1].flatMap((i) => [2, 3].flatMap((j) => [4, 5].map((k) => [MAG[i], MAG[j], MAG[k]]))), [0, 6.2, 0], [-1.4, 6.2, 0], [1.4, 6.2, 0]],
+  top: [...[0, 1].flatMap((i) => [2, 3].flatMap((j) => [4, 5].map((k) => [MAG[i], MAG[j], MAG[k]]))), [0, 0, 5.2], [0, 0, -5.2], [0, 3.2, -4.4]],
+};
+function fitView(v) {
+  const saved = cam;
+  cam = { ...v, zoom: 1, ox: 0, oy: 0 }; camTrig();
+  const pts = FIT[v === VIEWS.top ? 'top' : 'persp'].map((p) => P(p[0], p[1], p[2]));
+  cam = saved; camTrig();
+  let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+  for (const p of pts) { x0 = Math.min(x0, p.x); x1 = Math.max(x1, p.x); y0 = Math.min(y0, p.y); y1 = Math.max(y1, p.y); }
+  const mx = 8, mt = 54, mb = 36, z = Math.min((W - 2 * mx) / (x1 - x0), (H - mt - mb) / (y1 - y0));
+  v.zoom = z; v.ox = -((x0 + x1) / 2 - W / 2) * z; v.oy = mt + (H - mt - mb) / 2 - H / 2 - ((y0 + y1) / 2 - H / 2) * z;
+}
+
+let prims = [];
+const avgZ = (pts) => pts.reduce((s, p) => s + p.z, 0) / pts.length;
+const poly = (pts, fill, stroke, z) => prims.push({ k: 0, pts, fill, stroke, z: z ?? avgZ(pts) });
+const seg = (a, b, color, w, z) => prims.push({ k: 1, a, b, color, w, z: z ?? (a.z + b.z) / 2 });
+function area2(p) { let a = 0; for (let i = 0; i < p.length; i++) { const q = p[i], r = p[(i + 1) % p.length]; a += q.x * r.y - r.x * q.y; } return a; }
+const LIGHT = (() => { const v = [-0.35, 0.85, 0.45], n = Math.hypot(...v); return v.map((x) => x / n); })();
+const FACES = [[0, 3, 2, 1, [0, 0, -1]], [4, 5, 6, 7, [0, 0, 1]], [0, 4, 7, 3, [-1, 0, 0]], [1, 2, 6, 5, [1, 0, 0]], [3, 7, 6, 2, [0, 1, 0]], [0, 1, 5, 4, [0, -1, 0]]];
+function box(x0, x1, y0, y1, z0, z1, base) {
+  const V = [[x0, y0, z0], [x1, y0, z0], [x1, y1, z0], [x0, y1, z0], [x0, y0, z1], [x1, y0, z1], [x1, y1, z1], [x0, y1, z1]].map((v) => P(v[0], v[1], v[2]));
+  for (const [i, j, k, l, n] of FACES) {
+    const pts = [V[i], V[j], V[k], V[l]];
+    if (area2(pts) >= 0) continue;                 // وجه لا يُرى
+    const lit = 0.66 + 0.5 * Math.max(0, n[0] * LIGHT[0] + n[1] * LIGHT[1] + n[2] * LIGHT[2]);
+    poly(pts, shade(base, lit), shade(base, 0.7));
+  }
+}
+function renderPrim(p) {
+  if (p.k === 0) {
+    ctx.beginPath(); p.pts.forEach((q, i) => (i ? ctx.lineTo(q.x, q.y) : ctx.moveTo(q.x, q.y))); ctx.closePath();
+    ctx.fillStyle = p.fill; ctx.fill();
+    if (p.stroke) { ctx.strokeStyle = p.stroke; ctx.lineWidth = 1; ctx.lineJoin = 'round'; ctx.stroke(); }
+  } else {
+    ctx.beginPath(); ctx.moveTo(p.a.x, p.a.y); ctx.lineTo(p.b.x, p.b.y);
+    ctx.strokeStyle = p.color; ctx.lineWidth = p.w; ctx.lineCap = 'round'; ctx.stroke();
+  }
+}
+function rr(c, x, y, w, h, r) {
+  c.beginPath(); c.moveTo(x + r, y);
+  c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r);
+  c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath();
+}
+function halo(c, text, x, y, align, color, dir, font, bg) {
+  c.font = font; c.textAlign = align; c.direction = dir || 'ltr'; c.textBaseline = 'middle';
+  c.lineJoin = 'round'; c.lineWidth = 4; c.strokeStyle = bg || C.stage; c.strokeText(text, x, y);
+  c.fillStyle = color; c.fillText(text, x, y); c.direction = 'ltr';
+}
+function arrow(a, b, color, w, head = 10) {
+  const dx = b.x - a.x, dy = b.y - a.y, L = Math.hypot(dx, dy);
+  if (L < 3) return;
+  const ux = dx / L, uy = dy / L, hl = Math.min(head, L * 0.6), hw = hl * 0.55;
+  ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = w; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x - ux * hl * 0.7, b.y - uy * hl * 0.7); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(b.x, b.y);
+  ctx.lineTo(b.x - ux * hl - uy * hw, b.y - uy * hl + ux * hw); ctx.lineTo(b.x - ux * hl + uy * hw, b.y - uy * hl - ux * hw);
+  ctx.closePath(); ctx.fill();
+}
+const tipOf = (a, b, px) => { const dx = b.x - a.x, dy = b.y - a.y, L = Math.hypot(dx, dy) || 1; return { x: b.x + dx / L * px, y: b.y + dy / L * px }; };
+
+// أركان الإطار: الضلع A في جهة +u والضلع B في جهة −u (u أفقي ضمن مستوي الإطار)
+function corners() {
+  const ux = -Math.sin(st.psi) * HD, uz = Math.cos(st.psi) * HD;
+  return { Ab: [ux, -HL, uz], At: [ux, HL, uz], Bt: [-ux, HL, -uz], Bb: [-ux, -HL, -uz], ux, uz };
+}
+const Pv = (v) => P(v[0], v[1], v[2]);
+const lerp3 = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
+// نقطة على محيط الإطار بجهة التيار الموجبة: Ab → Bb → Bt → At → Ab
+function loopPoint(c, t) {
+  const s = (((t % 1) + 1) % 1) * 18;
+  if (s < 4) return lerp3(c.Ab, c.Bb, s / 4);
+  if (s < 9) return lerp3(c.Bb, c.Bt, (s - 4) / 5);
+  if (s < 13) return lerp3(c.Bt, c.At, (s - 9) / 4);
+  return lerp3(c.At, c.Ab, (s - 13) / 5);
+}
+const forceLen = (F) => clamp(2.2 * Math.sqrt(F / 0.25), 0.7, 4.6);   // طول سهم القوة (سم) ∝ الجذر لكي يبقى ضمن الرسم
+
+let crossings = [], chevrons = [];
+function buildScene(q, c) {
+  prims = [];
+  // المغناطيس على شكل U: ساقان (N أحمر، S أزرق) وقاعدة من تحتهما
+  box(-7.5, -GAP, -3.8, 3.6, -3, 3, C.north); box(GAP, 7.5, -3.8, 3.6, -3, 3, C.south);
+  box(-7.5, 0, -5.4, -3.8, -3, 3, C.north); box(0, 7.5, -5.4, -3.8, -3, 3, C.south);
+  // خطوط الحقل: من القطب N إلى القطب S، والتي تجتاز الإطار ملوّنة
+  const lim = HD * Math.abs(Math.cos(st.psi)), tanP = Math.tan(st.psi);
+  const thr = q.cosA >= 0 ? C.flux : C.fluxneg;
+  crossings = []; chevrons = [];
+  for (const y of ROWS) for (const z of COLS) {
+    const through = Math.abs(y) < HL && Math.abs(z) < lim - 1e-9;
+    const col = through ? thr : C.fieldline, w = through ? 2.2 : 1.3;
+    const xs = [-GAP, -2.8, -1, 1, 2.8, GAP];
+    if (through) { const xc = -z * tanP; xs.push(xc); xs.sort((a, b) => a - b); crossings.push(P(xc, y, z)); }
+    let prev = P(xs[0], y, z);
+    for (let i = 1; i < xs.length; i++) { const cur = P(xs[i], y, z); seg(prev, cur, col, w); prev = cur; }
+    chevrons.push([P(3.3, y, z), P(3.8, y, z), col]);
+  }
+  // الإطار: وجه شفاف ملوّن حسب الوجه الظاهر، وأضلاع نحاسية سميكة
+  const A1 = Pv(c.Ab), A2 = Pv(c.At), B2 = Pv(c.Bt), B1 = Pv(c.Bb), ctr = P(0, 0, 0);
+  const ar = area2([A1, A2, B2, B1]);
+  if (Math.abs(ar) > 40) {
+    // ترتيب Ab→At→Bt→Bb ناظمه −n_هندسي؛ إذا ظهر بعكس عقارب الساعة فنحن نرى الوجه الذي يخرج منه n_هندسي
+    const seeNb = ar > 0, seeNorth = q.sN > 0 ? seeNb : !seeNb;
+    poly([A1, A2, B2, B1], rgba(seeNorth ? C.north : C.south, 0.2), null, ctr.z);
+  }
+  const ww = Math.max(3.2, 0.26 * kz), hi = shade(C.copperHi, 1);
+  for (const [a, b] of [[A1, A2], [A2, B2], [B2, B1], [B1, A1]]) {
+    const z = (a.z + b.z) / 2;
+    seg(a, b, C.copper, ww, z);
+    seg(a, b, hi, Math.max(1, ww * 0.28), z + 1e-3);
+  }
+  // التعليق: سلك رفيع، أو سلك فتل أسمك، أو محور المحرك
+  if (st.mode === 'motor') seg(P(0, -3.4, 0), P(0, 4.2, 0), C.steel, Math.max(3, 0.2 * kz));
+  else {
+    seg(P(0, HL, 0), P(0, 6.2, 0), st.mode === 'torsion' ? C.ink : C.steel, st.mode === 'torsion' ? 2.4 : 1.4);
+    seg(P(-1.4, 6.2, 0), P(1.4, 6.2, 0), C.muted, 5);
+  }
+  prims.sort((a, b) => a.z - b.z);
+  for (const p of prims) renderPrim(p);
+}
+
+function drawChevrons() {
+  ctx.lineWidth = 1.6; ctx.lineCap = 'round';
+  for (const [a, b, col] of chevrons) {
+    const dx = b.x - a.x, dy = b.y - a.y, L = Math.hypot(dx, dy) || 1, ux = dx / L, uy = dy / L, s = 4;
+    ctx.strokeStyle = col;
+    ctx.beginPath(); ctx.moveTo(b.x - ux * s - uy * s, b.y - uy * s + ux * s); ctx.lineTo(b.x, b.y); ctx.lineTo(b.x - ux * s + uy * s, b.y - uy * s - ux * s); ctx.stroke();
+  }
+}
+
+// القوى على الضلعين الشاقوليين + ذراع المزدوجة
+function drawForces(q, c) {
+  const sF = Math.sign(q.Ic), Lf = forceLen(q.F);
+  const xA = c.ux, zA = c.uz, xB = -c.ux, zB = -c.uz;
+  if (q.I > 0 && q.sinA > 0.03 && (cam.pitch > 1.0 || focus === 'arm')) {
+    // حاملا القوتين (خطان متقطعان على امتداد z) والبعد بينهما d′
+    ctx.save(); ctx.setLineDash([5, 5]); ctx.globalAlpha = 0.75;
+    for (const x of [xA, xB]) { const a = P(x, 0, -3.4), b = P(x, 0, 3.4); ctx.strokeStyle = C.arm; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
+    ctx.restore();
+    const a = P(xA, 0, -3.4), b = P(xB, 0, -3.4);
+    arrow(a, b, C.arm, 2.2, 7); arrow(b, a, C.arm, 2.2, 7);
+    const m = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+    halo(ctx, `d′ = ${f(q.dp * 100, 1)} cm`, m.x, m.y - 12, 'center', C.armInk, 'ltr', `800 ${W < 500 ? 12 : 13}px ${FONT}`);
+  }
+  if (st.showH && q.I > 0) {   // القوتان على الضلعين الأفقيين: شاقوليتان (موازيتان للمحور)
+    const Fh = st.N * q.I * WID * st.B * Math.abs(Math.cos(st.psi)), up = sF * Math.sign(Math.cos(st.psi));
+    if (Fh > 1e-4) {
+      const Lh = forceLen(Fh), px = 0.9 * c.ux / HD, pz = 0.9 * c.uz / HD;
+      ctx.globalAlpha = 0.65;
+      arrow(P(px, HL, pz), P(px, HL + up * Lh, pz), C.force, 2.6);
+      arrow(P(px, -HL, pz), P(px, -HL - up * Lh, pz), C.force, 2.6);
+      ctx.globalAlpha = 1;
+    }
+  }
+  if (q.I > 0) {
+    const a0 = P(xA, 0, zA), a1 = P(xA, 0, zA + sF * Lf), b0 = P(xB, 0, zB), b1 = P(xB, 0, zB - sF * Lf);
+    arrow(a0, a1, C.force, 4, 13); arrow(b0, b1, C.force, 4, 13);
+    const fnt = `800 ${W < 500 ? 13 : 15}px ${FONT}`, ta = tipOf(a0, a1, 12), tb = tipOf(b0, b1, 12);
+    halo(ctx, 'F', ta.x, ta.y, 'center', C.forceInk, 'ltr', fnt); halo(ctx, 'F', tb.x, tb.y, 'center', C.forceInk, 'ltr', fnt);
+  }
+}
+
+function drawCurrent(q, c) {
+  if (q.I <= 0) return;
+  ctx.fillStyle = C.current; ctx.strokeStyle = rgba(C.ink, 0.35); ctx.lineWidth = 1;
+  const n = 22, r = Math.max(2.2, kz * 0.11);
+  for (let i = 0; i < n; i++) {
+    const p = Pv(loopPoint(c, i / n + dotPhase));
+    ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, TAU); ctx.fill(); ctx.stroke();
+  }
+  if (cam.pitch > 1.15) {     // من فوق: ⊗ التيار ينزل في الضلع، ⊙ يصعد
+    const down = q.Ic > 0;
+    for (const [v, into] of [[c.At, down], [c.Bt, !down]]) {
+      const p = Pv(v), R = 8;
+      ctx.beginPath(); ctx.arc(p.x, p.y, R, 0, TAU); ctx.fillStyle = C.card; ctx.fill(); ctx.strokeStyle = C.ink; ctx.lineWidth = 1.6; ctx.stroke();
+      ctx.beginPath();
+      if (into) { ctx.moveTo(p.x - 4, p.y - 4); ctx.lineTo(p.x + 4, p.y + 4); ctx.moveTo(p.x + 4, p.y - 4); ctx.lineTo(p.x - 4, p.y + 4); ctx.stroke(); }
+      else { ctx.arc(p.x, p.y, 2.4, 0, TAU); ctx.fillStyle = C.ink; ctx.fill(); }
+    }
+  }
+}
+
+function drawNormal(q) {
+  const nx = q.sN * Math.cos(st.psi), nz = q.sN * Math.sin(st.psi), o = P(0, 0, 0);
+  const bEnd = P(3.1, 0, 0), nEnd = P(3.1 * nx, 0, 3.1 * nz);
+  arrow(o, bEnd, C.muted, 2, 9);
+  // قوس الزاوية α من B إلى n
+  const phi = Math.atan2(nz, nx), R = 1.35;
+  ctx.strokeStyle = C.ink; ctx.lineWidth = 1.6; ctx.beginPath();
+  for (let i = 0; i <= 24; i++) { const t = phi * i / 24, p = P(R * Math.cos(t), 0, R * Math.sin(t)); i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y); }
+  ctx.stroke();
+  arrow(o, nEnd, C.accent, 3, 11);
+  const fnt = `800 ${W < 500 ? 13 : 15}px ${FONT}`;
+  const tb = tipOf(o, bEnd, 11), tn = tipOf(o, nEnd, 11), pa = P(1.95 * Math.cos(phi / 2), 0, 1.95 * Math.sin(phi / 2));
+  if (Math.hypot(tb.x - tn.x, tb.y - tn.y) < 24) { const up = tb.y <= tn.y ? -1 : 1; tb.y += up * 10; tn.y -= up * 10; }
+  halo(ctx, 'B', tb.x, tb.y, 'center', C.muted, 'ltr', fnt);
+  halo(ctx, 'n', tn.x, tn.y, 'center', C.accent, 'ltr', fnt);
+  if (q.alpha > 0.12) halo(ctx, 'α', pa.x, pa.y, 'center', C.ink, 'ltr', fnt);
+}
+
+// تدريج المقياس الغلفاني ومؤشره (سلك الفتل)
+function drawScale(q) {
+  const y = 3.2, R = 3.3, ptAt = (t, r) => P(-r * Math.sin(t), y, -r * Math.cos(t));
+  ctx.strokeStyle = C.muted; ctx.lineWidth = 1.4; ctx.beginPath();
+  for (let i = 0; i <= 48; i++) { const p = ptAt((-60 + 2.5 * i) / DEG, R); i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y); }
+  ctx.stroke();
+  const small = `700 ${W < 500 ? 10 : 11}px ${FONT}`;
+  for (let d = -60; d <= 60; d += 10) {
+    const t = d / DEG, a = ptAt(t, R), b = ptAt(t, R + (d % 30 ? 0.3 : 0.55));
+    ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+    if (d % 30 === 0) { const l = ptAt(t, R + 1.05); halo(ctx, Math.abs(d) + '°', l.x, l.y, 'center', C.muted, 'ltr', small); }
+  }
+  const th = PSI0 - st.psi, o = P(0, y, 0), e = ptAt(th, R + 0.2);
+  arrow(o, e, C.ink, 2.4, 9);
+  ctx.beginPath(); ctx.arc(o.x, o.y, 3.5, 0, TAU); ctx.fillStyle = C.ink; ctx.fill();
+}
+
+// المبدّل: نصفا حلقة يدوران مع الإطار، وفرشاتان ثابتتان
+function drawCommutator(q) {
+  const y = -3.15, R = 0.62, gap = 0.32;
+  const hl = (a0, a1, col) => {
+    ctx.strokeStyle = col; ctx.lineWidth = Math.max(3.5, kz * 0.2); ctx.lineCap = 'butt'; ctx.beginPath();
+    for (let i = 0; i <= 16; i++) { const t = a0 + (a1 - a0) * i / 16, p = P(R * Math.cos(t), y, R * Math.sin(t)); i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y); }
+    ctx.stroke(); ctx.lineCap = 'round';
+  };
+  hl(st.psi + gap, st.psi + PI - gap, C.copper); hl(st.psi + PI + gap, st.psi + TAU - gap, shade(C.copper, 0.75));
+  for (const sx of [-1, 1]) { const a = P(sx * (R + 0.15), y, 0), b = P(sx * (R + 0.9), y, 0); ctx.strokeStyle = C.ink; ctx.lineWidth = Math.max(4, kz * 0.22); ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
+  const l = P(0, y - 1.15, 0);
+  halo(ctx, 'المبدّل', l.x, l.y, 'center', C.muted, 'rtl', `700 ${W < 500 ? 11 : 12}px ${FONT}`);
+}
+
+function drawPoleLabels() {
+  const fnt = `800 ${W < 500 ? 16 : 19}px ${FONT}`;
+  for (const [x, t] of [[-6, 'N'], [6, 'S']]) { const p = P(x, 3.6, 0); halo(ctx, t, p.x, p.y, 'center', '#ffffff', 'ltr', fnt, 'rgba(0,0,0,0.35)'); }
+}
+
+// رسم صغير للدارة (مولّد + قاطعة k) في زاوية المسرح، والضغط عليه يغلق القاطعة أو يفتحها
+function drawSchematic() {
+  const w = 92, h = 46, x0 = W - w - 6, y0 = 6, on = st.closed;
+  sch = { x0, y0, w, h };
+  ctx.fillStyle = rgba(C.card, 0.92); ctx.strokeStyle = on ? C.current : C.line; ctx.lineWidth = on ? 2 : 1;
+  rr(ctx, x0, y0, w, h, 10); ctx.fill(); ctx.stroke();
+  const l = x0 + 14, r = x0 + w - 14, t = y0 + 12, b = y0 + 29, cx = (l + r) / 2;
+  ctx.strokeStyle = on ? C.ink : C.muted; ctx.lineWidth = 1.6; ctx.lineCap = 'round';
+  const line = (a, b_, c, d) => { ctx.beginPath(); ctx.moveTo(a, b_); ctx.lineTo(c, d); ctx.stroke(); };
+  line(l, t, cx - 4, t); line(cx + 4, t, r, t); line(l, t, l, b); line(r, t, r, b);
+  line(cx + 4, t - 7, cx + 4, t + 7); ctx.lineWidth = 3.4; line(cx - 4, t - 4, cx - 4, t + 4); ctx.lineWidth = 1.6;
+  line(l, b, cx - 10, b); line(cx + 10, b, r, b);
+  ctx.fillStyle = ctx.strokeStyle;
+  for (const x of [cx - 10, cx + 10]) { ctx.beginPath(); ctx.arc(x, b, 2.2, 0, TAU); ctx.fill(); }
+  ctx.lineWidth = 2.2; if (on) line(cx - 10, b, cx + 10, b); else line(cx - 10, b, cx + 7, b - 9);
+  halo(ctx, '+', cx + 11, t - 6, 'center', C.muted, 'ltr', `800 11px ${FONT}`, rgba(C.card, 0.92));
+  halo(ctx, on ? 'k مغلقة' : 'k مفتوحة', cx, y0 + h - 7, 'center', on ? C.ink : C.muted, 'rtl', `800 11.5px ${FONT}`, rgba(C.card, 0.92));
+}
+
+function bboxOf(pts, pad) {
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  for (const p of pts) { x0 = Math.min(x0, p.x); y0 = Math.min(y0, p.y); x1 = Math.max(x1, p.x); y1 = Math.max(y1, p.y); }
+  return [x0 - pad, y0 - pad, x1 - x0 + 2 * pad, y1 - y0 + 2 * pad];
+}
+function drawFocus(q, c) {
+  let R = null;
+  const fr = [c.Ab, c.At, c.Bt, c.Bb].map(Pv);
+  if (focus === 'frame' || focus === 'flux') R = bboxOf(fr, 18);
+  else if (focus === 'forces') { const L = forceLen(q.F); R = bboxOf([P(c.ux, 0, c.uz + L), P(c.ux, 0, c.uz - L), P(-c.ux, 0, -c.uz + L), P(-c.ux, 0, -c.uz - L), ...fr], 14); }
+  else if (focus === 'arm') R = bboxOf([P(c.ux, 0, -3.4), P(-c.ux, 0, -3.4), P(c.ux, 0, 3.4), P(-c.ux, 0, 3.4)], 18);
+  else if (focus === 'scale') R = bboxOf([P(-3.3, 3.2, -2), P(3.3, 3.2, -2), P(0, 3.2, -4.6), P(0, 3.2, 0)], 16);
+  if (!R) return;
+  R[0] = Math.max(2, R[0]); R[1] = Math.max(2, R[1]); R[2] = Math.min(W - 2 - R[0], R[2]); R[3] = Math.min(H - 2 - R[1], R[3]);
+  ctx.save();
+  ctx.strokeStyle = C.force; ctx.globalAlpha = 0.55 + 0.45 * Math.sin(clock * 4); ctx.lineWidth = 2.5;
+  ctx.setLineDash([7, 5]); ctx.lineDashOffset = -clock * 22;
+  rr(ctx, R[0], R[1], R[2], R[3], 12); ctx.stroke();
+  ctx.restore();
+}
+
+function draw() {
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, W, H);
+  camTrig();
+  const q = derived(), c = corners();
+  buildScene(q, c);
+  drawChevrons();
+  for (const p of crossings) { ctx.beginPath(); ctx.arc(p.x, p.y, 3, 0, TAU); ctx.fillStyle = q.cosA >= 0 ? C.flux : C.fluxneg; ctx.fill(); }
+  drawForces(q, c);
+  drawCurrent(q, c);
+  drawNormal(q);
+  if (st.mode === 'torsion') drawScale(q);
+  if (st.mode === 'motor' && cam.pitch < 1.0) drawCommutator(q);
+  drawPoleLabels();
+  drawSchematic();
+  if (focus) drawFocus(q, c);
+}
+
+// ================= الحركة =================
+let lastPsi = st.psi, c2Armed = false, c3Armed = false, stuck = false;
+// الإطار مستقر عند التدفق الأعظمي (تأرجح أقل من 3° تقريبًا)
+const settled = (q) => q.alpha < 0.06 && Math.abs(st.omega) < 1.2 && !dragging && !st.hold && !psiTween;
+function physics(dt) {
+  if (st.hold || dragging || psiTween) { still = 0; return; }
+  const h0 = dt / SLOW, n = Math.max(1, Math.ceil(h0 / 2e-4)), h = h0 / n;
+  stuck = false;
+  for (let i = 0; i < n; i++) {
+    if (st.mode === 'motor' && Math.abs(st.omega) < 0.05 && st.N * st.I * AREA * st.B * Math.abs(Math.sin(st.psi)) < TSTATIC) { st.omega = 0; stuck = true; break; }
+    st.omega += accel(st.psi, st.omega) * h; st.psi += st.omega * h;
+  }
+  if (st.closed && st.I > 0 && st.mode !== 'motor') st.omega += (Math.random() - 0.5) * 0.01;   // اهتزاز صغير جدًا، كما في الواقع
+  if (st.mode === 'motor' && st.closed) revs += Math.abs(st.psi - lastPsi) / TAU;
+  if (st.mode !== 'torsion' && Math.abs(st.psi) > 50) st.psi = wrapPi(st.psi);
+  lastPsi = st.psi;
+  still = Math.abs(st.omega) < 0.5 ? still + dt : 0;     // 0.5 rad/s حقيقية = 3° في الثانية على الشاشة
+}
+function camTo(name) {
+  view = name;
+  camTween = { from: { ...cam }, to: VIEWS[name], t0: performance.now(), dur: reduceMotion ? 1 : 900 };
+  $('viewBtn').textContent = name === 'top' ? '↗️ منظر مائل' : '⬇️ انظر من فوق';
+}
+const ease = (k) => (k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2);
+function runTweens(now) {
+  if (camTween) {
+    const k = clamp((now - camTween.t0) / camTween.dur, 0, 1), e = ease(k);
+    for (const key of ['yaw', 'pitch', 'zoom', 'ox', 'oy', 'ty', 'tz']) cam[key] = camTween.from[key] + (camTween.to[key] - camTween.from[key]) * e;
+    if (k >= 1) camTween = null;
+  }
+  if (psiTween) {
+    const k = clamp((now - psiTween.t0) / psiTween.dur, 0, 1);
+    st.psi = psiTween.from + (psiTween.to - psiTween.from) * ease(k); st.omega = 0;
+    if (k >= 1) { const after = psiTween.after; psiTween = null; lastPsi = st.psi; if (after) after(); }
+  }
+}
+// إرجاع الإطار إلى زاوية معيّنة بحركة ناعمة (القاطعة مفتوحة أثناءها)
+function turnTo(target, after) {
+  const from = st.mode === 'torsion' ? st.psi : wrapPi(st.psi);
+  const to = from + wrapPi(target - from);
+  psiTween = { from, to, t0: performance.now(), dur: reduceMotion ? 1 : clamp(Math.abs(to - from) * 600, 250, 1100), after };
+}
+
+let last = performance.now(), lastUI = 0;
+function frame(now) {
+  const dt = Math.min(0.05, (now - last) / 1000); last = now;
+  clock += dt;
+  runTweens(now);
+  if (visible && W) {
+    physics(dt);
+    const q = coilI();
+    if (q) dotPhase += Math.sign(q) * (0.05 + 0.22 * Math.abs(q)) * dt;
+    draw();
+  }
+  if (rvis && RW) { rstep(dt); rdraw(); }
+  if (now - lastUI > 90) { lastUI = now; ui(); }
+  requestAnimationFrame(frame);
+}
+
+// ================= الواجهة =================
+const el = {
+  status: $('status'), hint: $('hint'), tip: $('tip'), toast: $('toast'), kBtn: $('kBtn'), revBtn: $('revBtn'),
+  Isl: $('Isl'), Nsl: $('Nsl'), Bsl: $('Bsl'), ksl: $('ksl'), Io: $('Io'), No: $('No'), Bo: $('Bo'), ko: $('ko'),
+  tour: $('tour'), tourText: $('tourText'), tourStep: $('tourStep'), tourPrev: $('tourPrev'), tourNext: $('tourNext'),
+  tourSkip: $('tourSkip'), tourOpen: $('tourOpen'), dots: $('dots'),
+};
+const b = (x) => `<bdi>${x}</bdi>`;
+function setFill(inp) { inp.style.setProperty('--fill', ((inp.value - inp.min) / (inp.max - inp.min) * 100) + '%'); }
+function syncControls() {
+  el.Isl.value = st.I; el.Nsl.value = st.N; el.Bsl.value = st.B; el.ksl.value = st.k; $('showH').checked = st.showH;
+  [el.Isl, el.Nsl, el.Bsl, el.ksl].forEach(setFill);
+  el.Io.innerHTML = b(f(st.I, 2) + ' A'); el.No.textContent = st.N + ' لفّة'; el.Bo.innerHTML = b(f(st.B, 2) + ' T'); el.ko.innerHTML = b(f(st.k, 3) + ' N·m/rad');
+  el.kBtn.textContent = st.closed ? '⏻ افتح القاطعة k' : '⏻ أغلق القاطعة k';
+  el.kBtn.classList.toggle('live', st.closed); el.kBtn.classList.toggle('primary', !st.closed);
+  el.kBtn.setAttribute('aria-pressed', String(st.closed));
+  document.querySelectorAll('#modeSeg button').forEach((bt) => bt.setAttribute('aria-checked', String(bt.dataset.v === st.mode)));
+}
+
+function statusHTML(q) {
+  const G = `${b('Γ = ' + sci(q.G, 2, q.Gmax * 1e-3 + 1e-12) + ' N·m')}`;
+  if (st.hold) return ['', '🤚 نمسك الإطار في وضعه الأول (α = π/2)', `القوتان متعاكستان، والذراع ${b('d′')} أطول ما يمكن (${b('d′ = d = 4 cm')})، فالعزم أعظمي: ${G}.`];
+  if (dragging) return ['', '✋ أنت تمسك الإطار بإصبعك', q.I > 0 ? `العزم الذي يحاول تدويره الآن ${G} عند ${b('α = ' + deg(q.alpha))}. اتركه وراقب أين يستقر.` : 'لا يمر تيار، فلا قوى عليه. أغلق القاطعة k ثم اتركه.'];
+  if (!st.closed) return ['', '🔌 القاطعة k مفتوحة: لا تيار، فلا قوى', st.mode === 'torsion' ? `سلك الفتل يعيد الإطار إلى وضعه الأصلي (${b('α = π/2')}). أغلق القاطعة k.` : 'الإطار يبقى حيث تتركه. أغلق القاطعة k، أو أدر الإطار بإصبعك.'];
+  if (st.I === 0) return ['', '0️⃣ القاطعة مغلقة لكن شدة التيار صفر', 'زِد شدة التيار I من الشريط تحت الرسم.'];
+  if (st.mode === 'motor') {
+    const rps = Math.abs(st.omega) / TAU;
+    if (stuck) return ['warn', '🛑 النقطة الميتة: المحرك لا يبدأ وحده', `قرب ${b('α = 0')} يكون الذراع ${b('d′')} صفرًا تقريبًا، فالعزم أصغر من احتكاك المحور. أدر الإطار قليلًا بإصبعك.`];
+    return ['', '⚙️ محرك: المبدّل يعكس التيار كل نصف دورة', `كلما وصل الإطار إلى التدفق الأعظمي انعكس التيار فيه، فيبقى العزم يدوّره بالاتجاه نفسه. سرعته الحقيقية نحو ${b(f(rps, 1))} دورة في الثانية.`];
+  }
+  if (st.mode === 'torsion') {
+    if (still > 0.5) return ['ok', '🌀 توازن: عزم الفتل = عزم المزدوجة الكهرطيسية', `انحرف الإطار ${b('θ = ' + deg(Math.abs(q.theta), 1))} فقط ثم أوقفه السلك المفتول. ضاعف التيار تتضاعف θ تقريبًا: هكذا يقيس المقياس الغلفاني التيار.`];
+    return ['', '🌀 سلك الفتل يقاوم الدوران…', `يتأرجح الإطار حتى يتساوى عزم الفتل ${b('k·θ')} مع عزم المزدوجة الكهرطيسية.`];
+  }
+  if (settled(q)) return ['ok', '✅ استقر الإطار: خطوط الحقل عمودية على مستويه (α = 0)', `التدفق أعظمي ${b('Φ = N·B·S = ' + sci(q.Phi) + ' Wb')}، والعزم صفر لأن القوتين صارتا على حامل واحد (${b('d′ = 0')}).`];
+  if (q.alpha > PI - 0.15 && Math.abs(st.omega) < 1.5) return ['warn', '⚖️ توازن قلق عند α = π', 'العزم صفر هنا أيضًا، لكن التدفق سالب (أصغري). أي اهتزاز صغير سيقلب الإطار نصف دورة.'];
+  return ['', '🔄 الإطار يدور نحو التدفق الأعظمي', `العزم الآن ${G}. كلما اقترب من ${b('α = 0')} قصُر الذراع ${b('d′')} فقلّ العزم.`];
+}
+
+const done = new Set();
+let toastTimer = 0;
+function toast(msg) {
+  el.toast.textContent = msg; el.toast.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => el.toast.classList.remove('show'), 2200);
+}
+function award(id) {
+  if (done.has(id)) return;
+  done.add(id); $(id).classList.add('done'); toast(`✓ أحسنت! (${done.size}/5)`);
+  $('chCount').textContent = `${done.size}/5`;
+}
+
+let lastStatus = '';
+function ui() {
+  const q = derived();
+  const set = (id, v) => { const e = $(id); if (e.innerHTML !== v) e.innerHTML = v; };
+  const gTiny = q.Gmax * 1e-3 + 1e-12;
+  set('mG', sci(q.G, 2, gTiny) + ' N·m');
+  $('bG').style.width = (q.Gmax > 0 ? clamp(q.G / q.Gmax, 0, 1) * 100 : 0) + '%';
+  set('mD', f(q.dp * 100, 1) + ' cm');
+  set('mF', f(q.F, 2) + ' N');
+  set('mP', sci(q.Phi, 2, q.PhiMax * 1e-3) + ' Wb');
+  const bp = $('bP'), fr = clamp(q.cosA, -1, 1);
+  bp.className = fr >= 0 ? 'fx' : 'neg';
+  bp.style.left = (fr >= 0 ? 50 : 50 + fr * 50) + '%'; bp.style.width = Math.abs(fr) * 50 + '%';
+  set('mA', `${deg(q.alpha)} (${f(q.alpha, 2)} rad)`);
+  set('mL', `${q.lines} من 15`);
+  const xr = $('mXrow');
+  if (st.mode === 'torsion') { xr.hidden = false; set('mXl', 'زاوية الانحراف θ'); set('mX', deg(Math.abs(q.theta), 1)); }
+  else if (st.mode === 'motor') { xr.hidden = false; set('mXl', 'دورات كاملة'); set('mX', String(Math.floor(revs))); }
+  else xr.hidden = true;
+  // الجملة البسيطة
+  const [cls, big, small] = statusHTML(q), key = cls + big + small;
+  if (key !== lastStatus) { lastStatus = key; el.status.className = 'status' + (cls ? ' ' + cls : ''); el.status.innerHTML = `<span class="big">${big}</span><span class="small">${small}</span>`; }
+  // المعادلات بالأرقام
+  set('eG1', `${st.N} × ${f(q.I, 2)} × 2.0×10⁻³ × ${f(st.B, 2)} × sin(${deg(q.alpha)})`);
+  set('eG2', sci(q.G, 2, gTiny));
+  set('eP1', `${st.N} × ${f(st.B, 2)} × 2.0×10⁻³ × cos(${deg(q.alpha)})`);
+  set('eP2', sci(q.Phi, 2, q.PhiMax * 1e-3));
+  set('eW1', `${f(q.I, 2)} × (${sci(q.Phi, 2, q.PhiMax * 1e-3)} − 0)`);
+  set('eW2', sci(q.I * q.Phi, 2, 1e-7));
+  set('eWn', q.I > 0
+    ? `Φ₀ = 0 هو التدفق في وضع البداية (α = π/2). من α = π/2 إلى α = 0 يكون العمل W = I·N·B·S = ${sci(q.I * q.PhiMax)} J، وهي الطاقة التي يتأرجح بها الإطار قبل أن يستهلكها التخميد.`
+    : 'أغلق القاطعة ليمر تيار: من دون تيار لا قوى ولا عمل.');
+  drawGC(q); drawCal();
+  // التحديات
+  if (dragging && q.I > 0 && q.sinA > 0.985) award('c1');
+  if (c2Armed && !dragging && q.alpha < 0.35) { c2Armed = false; award('c2'); }
+  if (c3Armed && st.closed && st.mode === 'free' && settled(q)) { c3Armed = false; award('c3'); }
+  if (st.mode === 'torsion' && st.closed && still > 0.6 && Math.abs(Math.abs(q.theta) * DEG - 10) < 0.3) award('c4');
+  if (st.mode === 'motor' && revs >= 5) award('c5');
+  placeHint();
+}
+
+// منحنيا العزم والتدفق بدلالة α
+const gcv = $('gc'), gctx = gcv.getContext('2d');
+function chartSize(cvs, c) {
+  const w = Math.round(cvs.clientWidth), h = Math.round(cvs.clientHeight), d = Math.min(window.devicePixelRatio || 1, 2.5);
+  if (cvs.width !== Math.round(w * d) || cvs.height !== Math.round(h * d)) { cvs.width = Math.round(w * d); cvs.height = Math.round(h * d); }
+  c.setTransform(d, 0, 0, d, 0, 0); c.clearRect(0, 0, w, h);
+  return { w, h };
+}
+function drawGC(q) {
+  const { w, h } = chartSize(gcv, gctx), c = gctx;
+  if (!w) return;
+  const l = 30, r = 14, t = 12, bt = 22, X = (a) => l + a / PI * (w - l - r), Y = (v) => t + (1 - v) / 2 * (h - t - bt);
+  c.strokeStyle = C.grid; c.lineWidth = 1;
+  c.beginPath(); for (const v of [1, -1]) { c.moveTo(l, Y(v)); c.lineTo(w - r, Y(v)); } c.stroke();
+  c.strokeStyle = C.muted; c.globalAlpha = 0.6; c.beginPath(); c.moveTo(l, Y(0)); c.lineTo(w - r, Y(0)); c.stroke(); c.globalAlpha = 1;
+  const small = `700 11px ${FONT}`;
+  for (const [a, s] of [[0, '0'], [PI / 2, 'π/2'], [PI, 'π']]) halo(c, s, X(a), h - 9, 'center', C.muted, 'ltr', small, C.soft);
+  halo(c, 'max', l - 4, Y(1), 'right', C.muted, 'ltr', small, C.soft); halo(c, '0', l - 4, Y(0), 'right', C.muted, 'ltr', small, C.soft);
+  halo(c, '−max', l - 4, Y(-1), 'right', C.muted, 'ltr', small, C.soft);
+  const curve = (fn, col) => { c.strokeStyle = col; c.lineWidth = 2.4; c.beginPath(); for (let i = 0; i <= 60; i++) { const a = PI * i / 60; i ? c.lineTo(X(a), Y(fn(a))) : c.moveTo(X(a), Y(fn(a))); } c.stroke(); };
+  curve(Math.sin, C.arm); curve(Math.cos, C.flux);
+  const x = X(q.alpha);
+  c.strokeStyle = C.ink; c.globalAlpha = 0.35; c.setLineDash([3, 4]); c.beginPath(); c.moveTo(x, t - 4); c.lineTo(x, h - bt); c.stroke(); c.setLineDash([]); c.globalAlpha = 1;
+  for (const [v, col] of [[q.sinA, C.arm], [q.cosA, q.cosA >= 0 ? C.flux : C.fluxneg]]) { c.beginPath(); c.arc(x, Y(v), 5, 0, TAU); c.fillStyle = col; c.fill(); c.strokeStyle = C.card; c.lineWidth = 2; c.stroke(); }
+  halo(c, 'α = ' + deg(q.alpha), clamp(x, l + 30, w - r - 30), t + 2, 'center', C.ink, 'ltr', `800 11.5px ${FONT}`, C.soft);
+}
+// منحني المعايرة: θ بدلالة I في الحقل المنتظم وفي الحقل نصف القطري
+const calcv = $('gcal'), calctx = calcv.getContext('2d');
+function drawCal() {
+  const { w, h } = chartSize(calcv, calctx), c = calctx;
+  if (!w) return;
+  const l = 34, r = 14, t = 10, bt = 22, X = (i) => l + i * (w - l - r), Y = (dg) => t + (1 - dg / 90) * (h - t - bt);
+  const sens = st.N * AREA * st.B / st.k;   // rad/A
+  c.strokeStyle = C.grid; c.lineWidth = 1; c.beginPath();
+  for (const dg of [30, 60, 90]) { c.moveTo(l, Y(dg)); c.lineTo(w - r, Y(dg)); } c.stroke();
+  c.strokeStyle = C.muted; c.globalAlpha = 0.6; c.beginPath(); c.moveTo(l, Y(0)); c.lineTo(w - r, Y(0)); c.moveTo(l, Y(0)); c.lineTo(l, t); c.stroke(); c.globalAlpha = 1;
+  const small = `700 11px ${FONT}`;
+  for (const dg of [0, 30, 60, 90]) halo(c, dg + '°', l - 4, Y(dg), 'right', C.muted, 'ltr', small, C.soft);
+  for (const i of [0, 0.5, 1]) halo(c, f(i, 1) + ' A', X(i), h - 9, 'center', C.muted, 'ltr', small, C.soft);
+  c.save(); c.beginPath(); c.rect(l, t - 2, w - l - r, h - t - bt + 2); c.clip();
+  c.strokeStyle = C.accent; c.lineWidth = 2; c.setLineDash([6, 4]); c.beginPath(); c.moveTo(X(0), Y(0)); c.lineTo(X(1), Y(sens * DEG)); c.stroke(); c.setLineDash([]);
+  c.strokeStyle = C.force; c.lineWidth = 2.6; c.beginPath();
+  for (let i = 0; i <= 50; i++) { const I = i / 50, th = solveTheta(st.N * I * AREA * st.B, st.k) * DEG; i ? c.lineTo(X(I), Y(th)) : c.moveTo(X(I), Y(th)); }
+  c.stroke(); c.restore();
+  const thU = solveTheta(st.N * st.I * AREA * st.B, st.k) * DEG, thR = sens * st.I * DEG;
+  for (const [v, col] of [[thU, C.force], [thR, C.accent]]) if (v <= 90) { c.beginPath(); c.arc(X(st.I), Y(v), 5, 0, TAU); c.fillStyle = col; c.fill(); c.strokeStyle = C.card; c.lineWidth = 2; c.stroke(); }
+  const note = `عند ${b('I = ' + f(st.I, 2) + ' A')} يعطي الحساب الدقيق في الحقل المنتظم ${b('θ = ' + f(thU, 1) + '°')}، بينما تعطي العلاقة الخطية ${b(f(thR, 1) + '°')}. الحساسية الآن ${b('N·S·B ÷ k = ' + f(sens, 2) + ' rad/A')}. غيّر I من الشريط تحت الرسم.`;
+  const cn = $('calNote'); if (cn.innerHTML !== note) cn.innerHTML = note;
+}
+
+// ---- الأزرار والأشرطة ----
+function setClosed(on) { st.closed = on; if (!on) c3Armed = false; syncControls(); }
+el.kBtn.addEventListener('click', () => { dismissHint(); setClosed(!st.closed); });
+el.revBtn.addEventListener('click', () => {
+  dismissHint(); st.dir = -st.dir;
+  if (st.closed && st.mode === 'free') c3Armed = true;
+  toast(st.dir > 0 ? '⇄ التيار بالجهة الأولى' : '⇄ انعكست جهة التيار');
+});
+function setMode(m) {
+  if (m === st.mode) return;
+  st.mode = m; revs = 0; still = 0; c3Armed = false;
+  if (m === 'torsion') { st.psi = PSI0; st.omega = 0; }       // سلك الفتل يُركَّب والإطار في وضعه الأصلي
+  else st.psi = wrapPi(st.psi);
+  lastPsi = st.psi; syncControls();
+}
+document.querySelectorAll('#modeSeg button').forEach((bt) => bt.addEventListener('click', () => { dismissHint(); setMode(bt.dataset.v); }));
+$('modeSeg').addEventListener('keydown', (e) => {
+  const order = ['free', 'torsion', 'motor'], i = order.indexOf(st.mode);
+  const d = e.key === 'ArrowLeft' ? 1 : e.key === 'ArrowRight' ? -1 : 0;   // الاتجاه من اليمين لليسار
+  if (!d) return;
+  e.preventDefault(); setMode(order[(i + d + 3) % 3]);
+  document.querySelector(`#modeSeg button[data-v="${st.mode}"]`).focus();
+});
+$('viewBtn').addEventListener('click', () => camTo(view === 'top' ? 'persp' : 'top'));
+el.Isl.addEventListener('input', () => { st.I = +el.Isl.value; syncControls(); });
+el.Nsl.addEventListener('input', () => { st.N = +el.Nsl.value; syncControls(); });
+el.Bsl.addEventListener('input', () => { st.B = +el.Bsl.value; syncControls(); });
+el.ksl.addEventListener('input', () => { st.k = +el.ksl.value; syncControls(); });
+$('showH').addEventListener('change', (e) => { st.showH = e.target.checked; });
+function resetAll() {
+  Object.assign(st, DEF, { dir: 1, hold: false, showH: false });
+  setMode('free'); setClosed(false); revs = 0; camTo('persp'); turnTo(PSI0); syncControls();
+}
+$('reset').addEventListener('click', resetAll);
+
+// ---- الجولة التعليمية ----
+const TOUR = [
+  { t: '👋 هذا إطار من 100 لفّة نحاسية، معلّق بسلك رفيع بين قطبي مغناطيس. الخطوط الرمادية هي خطوط الحقل من N إلى S، وهي الآن موازية لمستوي الإطار (α = π/2)، فلا يجتازه أي خط.',
+    s: { mode: 'free', view: 'persp', psi: PSI0, closed: false, dir: 1, I: DEF.I }, focus: 'frame' },
+  { t: '🔌 لنغلق القاطعة k ليمر التيار… راقب: يدور الإطار، ويتأرجح قليلًا، ثم يستقر عندما تصبح خطوط الحقل عمودية على مستويه (α = 0).',
+    s: { mode: 'free', view: 'persp', psi: PSI0, closed: true }, focus: 'frame' },
+  { t: '⬆️ لماذا دار؟ ننظر من فوق ونمسك الإطار في وضعه الأول. على كل ضلع شاقولي قوة F (السهمان البرتقاليان)، والتيار فيهما متعاكس، فالقوتان متعاكستان: إنهما مزدوجة تدوّر الإطار.',
+    s: { mode: 'free', view: 'top', psi: PSI0, closed: true, hold: true }, focus: 'forces' },
+  { t: '📏 ذراع المزدوجة d′ (الخط الوردي) هو البعد بين حاملَي القوتين: d′ = d·sin α. لنترك الإطار… يقصر الذراع فيقلّ العزم Γ = F·d′ حتى يصبح صفرًا عند α = 0.',
+    s: { mode: 'free', view: 'top', closed: true }, focus: 'arm' },
+  { t: '🧲 الخطوط الخضراء هي التي تجتاز الإطار. دار الإطار حتى يجتازه أكبر عدد منها، داخلةً من وجهه الجنوبي: هذه قاعدة التدفق الأعظمي.',
+    s: { mode: 'free', view: 'persp', closed: true }, focus: 'flux' },
+  { t: '🌀 الآن نعلّقه بسلك فتل يقاوم الدوران. يدور الإطار زاوية صغيرة θ فقط ثم يتوازن. كلما زاد التيار زادت θ: هذا مبدأ المقياس الغلفاني.',
+    s: { mode: 'torsion', view: 'persp', closed: true, I: 0.3 }, focus: 'scale' },
+  { t: '✋ دورك! أعدنا الإطار إلى وضعه الأول. أدره بإصبعك، وأغلق القاطعة، واعكس التيار، أو حوّله إلى محرك. ثم حاول حلّ التحديات.',
+    s: { mode: 'free', view: 'persp', psi: PSI0, closed: false, dir: 1, I: DEF.I }, focus: null, last: true },
+];
+let tourIdx = 0, tourOn = !isOG;
+TOUR.forEach(() => el.dots.appendChild(document.createElement('i')));
+function applyStep(s) {
+  if (s.mode) { if (s.mode === 'torsion' && st.mode === 'torsion') { st.psi = PSI0; st.omega = 0; } setMode(s.mode); }
+  if (s.view && s.view !== view) camTo(s.view);
+  if (s.I !== undefined) st.I = s.I;
+  if (s.dir) st.dir = s.dir;
+  st.hold = !!s.hold;
+  if (s.psi !== undefined) { setClosed(false); turnTo(s.psi, () => setClosed(!!s.closed)); }
+  else setClosed(!!s.closed);
+  syncControls();
+}
+function showStep(i) {
+  tourIdx = clamp(i, 0, TOUR.length - 1);
+  const stp = TOUR[tourIdx];
+  el.tourText.textContent = stp.t;
+  el.tourText.classList.remove('fade'); void el.tourText.offsetWidth; el.tourText.classList.add('fade');
+  el.tourStep.textContent = `${tourIdx + 1}/${TOUR.length}`;
+  [...el.dots.children].forEach((d, k) => { d.className = k === tourIdx ? 'on' : k < tourIdx ? 'done' : ''; });
+  el.tourPrev.disabled = tourIdx === 0;
+  el.tourNext.textContent = stp.last ? 'ابدأ التجربة ✓' : 'التالي ←';
+  focus = stp.focus;
+  applyStep(stp.s);
+  refreshHint();
+}
+function endTour(toDefaults) {
+  tourOn = false; focus = null; st.hold = false;
+  el.tour.hidden = true; el.tourOpen.hidden = false;
+  if (toDefaults) resetAll();
+  refreshHint();
+}
+el.tourNext.addEventListener('click', () => { if (TOUR[tourIdx].last) endTour(false); else showStep(tourIdx + 1); });
+el.tourPrev.addEventListener('click', () => showStep(tourIdx - 1));
+el.tourSkip.addEventListener('click', () => endTour(true));
+el.tourOpen.addEventListener('click', () => {
+  tourOn = true; el.tour.hidden = false; el.tourOpen.hidden = true;
+  showStep(0); el.tour.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+});
+
+// ---- التلميح والتدوير بالإصبع ----
+function placeHint() {
+  if (!W) return;
+  const p = P(0, -HL, 0);
+  el.hint.style.left = clamp(p.x, 80, W - 80) + 'px';
+  el.hint.style.top = Math.min(H - 44, p.y + 14) + 'px';
+}
+function refreshHint() { el.hint.classList.toggle('gone', !(!interacted && (!tourOn || TOUR[tourIdx].last))); }
+function dismissHint() { if (!interacted) { interacted = true; refreshHint(); } }
+
+function canvasPos(cx, cy) { const r = cv.getBoundingClientRect(); return { x: cx - r.left, y: cy - r.top }; }
+const inSch = (p) => sch && p.x >= sch.x0 && p.x <= sch.x0 + sch.w && p.y >= sch.y0 && p.y <= sch.y0 + sch.h;
+function hitFrame(p) {
+  const o = P(0, 0, 0);
+  if (cam.pitch > 1.0) return Math.hypot(p.x - o.x, p.y - o.y) < 3.6 * kz;
+  // منظر مائل: كل المنطقة بين القطبين حول الإطار، حتى لو كان الإطار يُرى من حافته
+  const top = P(0, HL, 0), bot = P(0, -HL, 0);
+  return Math.abs(p.x - o.x) < 3.2 * kz && p.y > top.y - 30 && p.y < bot.y + 30;
+}
+let drag = null;
+const angleAt = (p) => { const o = P(0, 0, 0); return Math.atan2(p.y - o.y, p.x - o.x); };
+function showTip(p) {
+  const q = derived();
+  el.tip.innerHTML = `α = ${b(deg(q.alpha))}`;
+  el.tip.style.left = clamp(p.x, 50, W - 50) + 'px';
+  el.tip.style.top = Math.max(30, p.y - 44) + 'px';
+  el.tip.classList.add('show');
+}
+function startDrag(p, id) {
+  psiTween = null; st.hold = false;
+  if (st.mode !== 'torsion') st.psi = wrapPi(st.psi);
+  drag = { id, x0: p.x, psi0: st.psi, ang: angleAt(p), t: performance.now(), vel: 0 };
+  dragging = true; stage.classList.add('dragging'); dismissHint(); showTip(p);
+}
+function moveDrag(p) {
+  const prev = st.psi, now = performance.now();
+  if (cam.pitch > 1.0) { const a = angleAt(p); st.psi += wrapPi(a - drag.ang); drag.ang = a; }   // من فوق: الإطار يتبع زاوية الإصبع
+  else st.psi = drag.psi0 - (p.x - drag.x0) * 0.012;                                        // منظر مائل: سحب أفقي يدوّره
+  if (st.mode === 'torsion') st.psi = clamp(st.psi, PSI0 - 1.4, PSI0 + 1.4);
+  const dt = Math.max(1, now - drag.t) / 1000;
+  drag.vel = 0.6 * drag.vel + 0.4 * (st.psi - prev) / dt; drag.t = now;
+  st.omega = 0; lastPsi = st.psi; showTip(p);
+}
+function endDrag() {
+  if (!drag) return;
+  const fresh = performance.now() - drag.t < 90;
+  st.omega = fresh ? clamp(drag.vel * SLOW, -60, 60) : 0;   // الإفلات مع سرعة الإصبع (بالزمن الحقيقي)
+  const q = derived();
+  if (st.closed && st.I > 0 && st.mode === 'free' && q.alpha > 2.88) c2Armed = true;
+  drag = null; dragging = false; still = 0; stage.classList.remove('dragging'); el.tip.classList.remove('show');
+}
+cv.addEventListener('touchstart', (e) => {
+  const t = e.changedTouches[0], p = canvasPos(t.clientX, t.clientY);
+  if (inSch(p)) { e.preventDefault(); dismissHint(); setClosed(!st.closed); return; }
+  if (!drag && hitFrame(p)) { e.preventDefault(); startDrag(p, t.identifier); }
+}, { passive: false });
+cv.addEventListener('touchmove', (e) => {
+  if (!drag) return;
+  e.preventDefault();
+  for (const t of e.changedTouches) if (t.identifier === drag.id) moveDrag(canvasPos(t.clientX, t.clientY));
+}, { passive: false });
+const touchEnd = (e) => { if (drag && [...e.changedTouches].some((t) => t.identifier === drag.id)) endDrag(); };
+cv.addEventListener('touchend', touchEnd);
+cv.addEventListener('touchcancel', touchEnd);
+let mouseDrag = false;
+cv.addEventListener('mousedown', (e) => {
+  const p = canvasPos(e.clientX, e.clientY);
+  if (inSch(p)) { e.preventDefault(); dismissHint(); setClosed(!st.closed); return; }
+  if (hitFrame(p)) { e.preventDefault(); mouseDrag = true; startDrag(p, 'mouse'); }
+});
+window.addEventListener('mousemove', (e) => {
+  const p = canvasPos(e.clientX, e.clientY);
+  if (mouseDrag && drag) { moveDrag(p); return; }
+  if (p.x >= 0 && p.y >= 0 && p.x <= W && p.y <= H) cv.style.cursor = inSch(p) ? 'pointer' : hitFrame(p) ? 'grab' : '';
+});
+window.addEventListener('mouseup', () => { if (mouseDrag) { mouseDrag = false; endDrag(); } });
+cv.addEventListener('keydown', (e) => {
+  const d = e.key === 'ArrowLeft' ? 1 : e.key === 'ArrowRight' ? -1 : 0;
+  if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); setClosed(!st.closed); return; }
+  if (!d) return;
+  e.preventDefault(); dismissHint(); psiTween = null; st.hold = false;
+  st.psi += d * 5 / DEG; st.omega = 0; lastPsi = st.psi; still = 0;
+});
+
+// ================= سكّتا لابلاس =================
+const rcv = $('rcv'), rctx = rcv.getContext('2d'), rstage = $('rstage');
+const R_LEN = 0.20, R_ELL = 0.06, R_B = 0.1, R_M = 0.02, R_SLOW = 2.5, R_GAMMA = 3;
+const R = { s: 0.15, v: 0, on: false, dir: 1, bdir: 1, I: 3 };
+let RW = 0, RH = 0, rdpr = 1, rvis = false, rdots = 0;
+// القوة الجبرية على القضيب (موجبة = نحو اليمين). dir=+1: التيار يصعد في القضيب، bdir=+1: الحقل نحو داخل الصفحة
+const rForce = () => (R.on ? -R.dir * R.bdir * R.I * R_ELL * R_B : 0);
+function rlayout() {
+  const w = Math.round(rstage.clientWidth);
+  if (!w || w === RW) return;
+  RW = w; RH = Math.round(clamp(w * 0.5, 190, 250)); rdpr = Math.min(window.devicePixelRatio || 1, 2.5);
+  rcv.style.height = RH + 'px'; rcv.width = Math.round(RW * rdpr); rcv.height = Math.round(RH * rdpr);
+  rdraw();   // رسمة أولى حتى لو لم يظهر القسم بعد
+}
+function rstep(dt) {
+  const a = rForce() / R_M - R_GAMMA * R.v, h = dt / R_SLOW;
+  R.v += a * h; R.s += R.v * h;
+  const lo = 0.012, hi = R_LEN - 0.012;
+  if (R.s < lo) { R.s = lo; R.v = Math.max(0, R.v); } else if (R.s > hi) { R.s = hi; R.v = Math.min(0, R.v); }
+  if (R.on) rdots += R.dir * (0.25 + 0.06 * R.I) * dt;
+}
+function rgeom() {
+  const xl = 22, xr = RW - 74, yt = RH * 0.3, yb = RH * 0.72;
+  return { xl, xr, yt, yb, xb: RW - 40, xRod: xl + (R.s / R_LEN) * (xr - xl) };
+}
+function rdraw() {
+  const c = rctx, g = rgeom();
+  c.setTransform(rdpr, 0, 0, rdpr, 0, 0); c.clearRect(0, 0, RW, RH);
+  // رموز الحقل: ⊗ نحو داخل الصفحة، ⊙ نحو خارجها
+  c.strokeStyle = C.fieldline; c.fillStyle = C.fieldline; c.lineWidth = 1.3;
+  for (let x = 30; x < g.xr + 10; x += 34) for (let y = 22; y < RH - 8; y += 32) {
+    c.beginPath(); c.arc(x, y, 6, 0, TAU); c.stroke(); c.beginPath();
+    if (R.bdir > 0) { c.moveTo(x - 3.6, y - 3.6); c.lineTo(x + 3.6, y + 3.6); c.moveTo(x + 3.6, y - 3.6); c.lineTo(x - 3.6, y + 3.6); c.stroke(); }
+    else { c.arc(x, y, 1.8, 0, TAU); c.fill(); }
+  }
+  // السكتان والدارة
+  c.lineCap = 'round';
+  for (const y of [g.yt, g.yb]) { c.strokeStyle = C.steel; c.lineWidth = 7; c.beginPath(); c.moveTo(g.xl, y); c.lineTo(g.xb, y); c.stroke(); c.strokeStyle = 'rgba(255,255,255,0.35)'; c.lineWidth = 2; c.beginPath(); c.moveTo(g.xl, y - 1.5); c.lineTo(g.xb, y - 1.5); c.stroke(); }
+  c.strokeStyle = R.on ? C.ink : C.muted; c.lineWidth = 2;
+  const ym = (g.yt + g.yb) / 2;
+  c.beginPath(); c.moveTo(g.xb, g.yt); c.lineTo(g.xb, ym - 9); c.moveTo(g.xb, ym + 9); c.lineTo(g.xb, g.yb); c.stroke();
+  // المولّد: الصفيحة الطويلة (+) نحو جهة التيار الخارج
+  const plus = R.dir > 0 ? -1 : 1;   // dir=+1: التيار يصعد في القضيب، أي يخرج من المولّد نحو السكة السفلى
+  c.lineWidth = 2; c.beginPath(); c.moveTo(g.xb - 14, ym + plus * -6); c.lineTo(g.xb + 14, ym + plus * -6); c.stroke();
+  c.lineWidth = 4.5; c.beginPath(); c.moveTo(g.xb - 7, ym + plus * 6); c.lineTo(g.xb + 7, ym + plus * 6); c.stroke();
+  halo(c, '+', g.xb + 22, ym - plus * 6, 'center', C.muted, 'ltr', `800 13px ${FONT}`);
+  if (!R.on) halo(c, 'مفصولة', g.xb - 8, RH - 14, 'center', C.muted, 'rtl', `700 11px ${FONT}`);
+  // جزيئات التيار على المسار المغلق: السكة السفلى ← القضيب ← السكة العليا ← المولّد
+  if (R.on) {
+    const pts = [[g.xb, g.yb], [g.xRod, g.yb], [g.xRod, g.yt], [g.xb, g.yt], [g.xb, g.yb]];
+    const lens = []; let tot = 0;
+    for (let i = 1; i < pts.length; i++) { const L = Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]); lens.push(L); tot += L; }
+    c.fillStyle = C.current; c.strokeStyle = rgba(C.ink, 0.35); c.lineWidth = 1;
+    const n = Math.max(6, Math.round(tot / 22));
+    for (let k = 0; k < n; k++) {
+      let s = ((((k / n + rdots) % 1) + 1) % 1) * tot, i = 0;
+      while (i < lens.length - 1 && s > lens[i]) { s -= lens[i]; i++; }
+      const t = lens[i] ? s / lens[i] : 0, x = pts[i][0] + (pts[i + 1][0] - pts[i][0]) * t, y = pts[i][1] + (pts[i + 1][1] - pts[i][1]) * t;
+      c.beginPath(); c.arc(x, y, 3, 0, TAU); c.fill(); c.stroke();
+    }
+  }
+  // القضيب
+  const gr = c.createLinearGradient(g.xRod - 6, 0, g.xRod + 6, 0);
+  gr.addColorStop(0, shade(C.copper, 0.75)); gr.addColorStop(0.45, C.copperHi); gr.addColorStop(1, shade(C.copper, 0.8));
+  c.fillStyle = gr; rr(c, g.xRod - 6, g.yt - 16, 12, g.yb - g.yt + 32, 6); c.fill();
+  // سهم التيار في القضيب
+  if (R.on) {
+    const y0 = R.dir > 0 ? g.yb - 18 : g.yt + 18, y1 = R.dir > 0 ? g.yt + 18 : g.yb - 18, x = g.xRod + 18;
+    arrowC(c, x, y0, x, y1, C.ink, 2, 8);
+    halo(c, 'I', x + 10, ym, 'center', C.ink, 'ltr', `800 14px ${FONT}`);
+  }
+  const F = rForce();
+  if (F) {
+    const L = clamp(Math.abs(F) / 0.03 * 80, 18, 90), dirx = Math.sign(F);
+    arrowC(c, g.xRod, ym, g.xRod + dirx * L, ym, C.force, 5, 14);
+    halo(c, 'F', g.xRod + dirx * (L + 12), ym, 'center', C.forceInk, 'ltr', `800 15px ${FONT}`);
+  }
+}
+function arrowC(c, x0, y0, x1, y1, col, w, head) {
+  const dx = x1 - x0, dy = y1 - y0, L = Math.hypot(dx, dy) || 1, ux = dx / L, uy = dy / L, hw = head * 0.55;
+  c.strokeStyle = col; c.fillStyle = col; c.lineWidth = w; c.lineCap = 'round';
+  c.beginPath(); c.moveTo(x0, y0); c.lineTo(x1 - ux * head * 0.7, y1 - uy * head * 0.7); c.stroke();
+  c.beginPath(); c.moveTo(x1, y1); c.lineTo(x1 - ux * head - uy * hw, y1 - uy * head + ux * hw); c.lineTo(x1 - ux * head + uy * hw, y1 - uy * head - ux * hw); c.closePath(); c.fill();
+}
+function rui() {
+  if (RW) rdraw();
+  $('rOn').textContent = R.on ? '⏻ افصل التيار' : '⏻ شغّل التيار';
+  $('rOn').classList.toggle('live', R.on); $('rOn').classList.toggle('primary', !R.on);
+  $('rIo').innerHTML = b(f(R.I, 1) + ' A'); setFill($('rI'));
+  $('rBadge').textContent = R.bdir > 0 ? 'الحقل B نحو داخل الصفحة ⊗' : 'الحقل B نحو خارج الصفحة ⊙';
+  const F = R.I * R_ELL * R_B, dirTxt = !R.on ? '' : rForce() < 0 ? ' ← (نحو اليسار)' : ' (نحو اليمين) →';
+  $('rEq').innerHTML = `F = I · ℓ · B = ${f(R.I, 1)} × ${f(R_ELL, 2)} × ${f(R_B, 2)} = <span class="ff">${R.on ? f(F, 3) : '0'}</span> <span class="sym">N</span><bdi dir="rtl" style="font-size:.85em">${R.on ? dirTxt : ' — التيار مفصول'}</bdi>`;
+}
+$('rOn').addEventListener('click', () => { R.on = !R.on; rui(); });
+$('rRev').addEventListener('click', () => { R.dir = -R.dir; rui(); });
+$('rFlip').addEventListener('click', () => { R.bdir = -R.bdir; rui(); });
+$('rI').addEventListener('input', (e) => { R.I = +e.target.value; rui(); });
+
+// ---- الاختبار ----
+const QUIZ = [
+  { q: 'إطار يمر فيه تيار، معلّق بسلك عديم الفتل بين قطبي مغناطيس. يستقر الإطار عندما تكون خطوط الحقل:', a: ['موازية لمستوي الإطار', 'عمودية على مستوي الإطار', 'مائلة على مستويه بزاوية 45°'], c: 1,
+    why: 'يستقر حيث يكون التدفق أعظميًا (α = 0)، أي عندما يجتازه أكبر عدد من خطوط الحقل. هناك تصبح القوتان على حامل واحد فينعدم العزم.' },
+  { q: 'يكون عزم المزدوجة الكهرطيسية أعظميًا عندما تكون الزاوية α بين شعاع الحقل والناظم على الإطار:', a: ['α = 0', 'α = π/2', 'α = π'], c: 1,
+    why: 'Γ = N·I·S·B·sin α، وأكبر قيمة لـ sin α هي 1 عند α = π/2، أي عندما يكون الحقل موازيًا لمستوي الإطار والتدفق صفرًا.' },
+  { q: 'إطار عدد لفّاته N = 200 ومساحته S = 10 cm²، يمر فيه تيار I = 0.4 A، في حقل منتظم B = 0.05 T، والزاوية α = π/6. عزم المزدوجة الكهرطيسية:', a: ['2×10⁻³ N·m', '4×10⁻³ N·m', '3.5×10⁻³ N·m', '20 N·m'], c: 0,
+    why: 'حوّل المساحة أولًا: 10 cm² = 10⁻³ m². ثم Γ = 200 × 0.4 × 10⁻³ × 0.05 × sin(π/6) = 2×10⁻³ N·m. انتبه: نستعمل sin لأن α بين الحقل والناظم.' },
+  { q: 'بعد أن استقر الإطار (سلك عديم الفتل)، عكسنا جهة التيار فيه. ماذا يحدث؟', a: ['يبقى في مكانه', 'يدور ربع دورة', 'يدور نصف دورة ثم يستقر من جديد', 'يدور باستمرار'], c: 2,
+    why: 'عكس التيار يبدّل وجهي الإطار، فيصبح التدفق أصغريًا (α = π)، وهذا توازن قلق. أقل اهتزاز يجعله يدور نصف دورة حتى يعود التدفق أعظميًا. جرّبه في التحدي 3.' },
+  { q: 'في المقياس الغلفاني (زوايا صغيرة)، إذا ضاعفنا شدة التيار فإن زاوية الانحراف θ:', a: ['تتضاعف', 'تتضاعف 4 مرات', 'لا تتغيّر', 'تنقص إلى النصف'], c: 0,
+    why: 'θ = (N·S·B ÷ k)·I، فالزاوية تتناسب طرديًا مع التيار.' },
+  { q: 'سلك مستقيم يمر فيه تيار، وُضع موازيًا لخطوط حقل مغناطيسي منتظم. القوة الكهرطيسية عليه:', a: ['معدومة', 'أعظمية', 'نصف قيمتها العظمى'], c: 0,
+    why: 'F = I·ℓ·B·sin θ، و θ = 0 فـ sin θ = 0. لهذا لا تؤثر قوة في الضلعين الأفقيين عندما يكون مستوي الإطار موازيًا للحقل.' },
+  { q: 'ما وظيفة المبدّل في المحرك الكهربائي ذي التيار المستمر؟', a: ['يزيد شدة الحقل المغناطيسي', 'يعكس جهة التيار في الإطار كل نصف دورة', 'يمنع الإطار من الدوران بسرعة كبيرة'], c: 1,
+    why: 'لولا المبدّل لتوقّف الإطار عند التدفق الأعظمي. عكس التيار كل نصف دورة يُبقي العزم بالاتجاه نفسه فيستمر الدوران.' },
+];
+const quiz = $('quiz');
+QUIZ.forEach((item, qi) => {
+  const box_ = document.createElement('div'); box_.className = 'q';
+  const p = document.createElement('p'); p.textContent = `${qi + 1}. ${item.q}`; box_.appendChild(p);
+  const opts = document.createElement('div'); opts.className = 'opts';
+  const why = document.createElement('p'); why.className = 'why';
+  item.a.forEach((txt, ai) => {
+    const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'opt'; btn.textContent = txt;
+    btn.addEventListener('click', () => {
+      opts.querySelectorAll('.opt').forEach((o) => o.classList.remove('right', 'wrong'));
+      btn.classList.add(ai === item.c ? 'right' : 'wrong');
+      if (ai !== item.c) opts.children[item.c].classList.add('right');
+      why.textContent = (ai === item.c ? '✓ صحيح! ' : '✗ ليس تمامًا. ') + item.why;
+      box_.classList.add('answered');
+    });
+    opts.appendChild(btn);
+  });
+  box_.appendChild(opts); box_.appendChild(why); quiz.appendChild(box_);
+});
+
+// ---- التشغيل ----
+readColors();
+matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', readColors);
+new MutationObserver(readColors).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+if (isOG) Object.assign(st, { closed: true, hold: true, psi: 0.95 });
+else if (!tourOn) el.tour.hidden = true;
+syncControls(); rui(); layout(); rlayout();
+new ResizeObserver(() => { layout(); rlayout(); }).observe(document.body);
+new IntersectionObserver((en) => { visible = en[0].isIntersecting; }).observe(stage);
+new IntersectionObserver((en) => { rvis = en[0].isIntersecting; }).observe(rstage);
+if (isOG) el.tour.hidden = true;
+else if (tourOn) showStep(0);
+requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
